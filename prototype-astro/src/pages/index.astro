@@ -4,6 +4,11 @@ import { dynasties } from '../data/dynasties';
 ---
 
 <Layout title="华夏春秋 | Chronicles of China" fullscreen={true}>
+  <!-- Ink wash background -->
+  <div id="ink-bg" aria-hidden="true">
+    <div id="ink-canvas"></div>
+  </div>
+
   <!-- Fixed header overlay -->
   <div class="fixed top-0 left-0 right-0 z-50 bg-night/80 backdrop-blur-md border-b border-gold/10">
     <div class="flex items-center justify-between px-6 h-11">
@@ -17,7 +22,7 @@ import { dynasties } from '../data/dynasties';
   </div>
 
   <!-- Full-screen horizontal scroll -->
-  <div id="scroll-wrapper" class="fixed inset-0 pt-11 bg-night flex items-center">
+  <div id="scroll-wrapper" class="fixed inset-0 pt-11 z-10 flex items-center">
     <div id="scroll-container" class="scroll-container flex h-[65vh] cursor-grab select-none overflow-x-auto overflow-y-hidden">
 
       <!-- Left spacing -->
@@ -115,6 +120,7 @@ import { dynasties } from '../data/dynasties';
   const container = document.getElementById('scroll-container');
   const progressBar = document.getElementById('progress-bar');
   const currentEra = document.getElementById('current-era');
+  const inkCanvas = document.getElementById('ink-canvas');
 
   if (container) {
     let isDown = false;
@@ -179,6 +185,9 @@ import { dynasties } from '../data/dynasties';
       const progress = container.scrollLeft / maxScroll;
       if (progressBar) {
         progressBar.style.transform = `scaleX(${progress})`;
+      }
+      if (inkCanvas) {
+        inkCanvas.style.transform = `translate3d(-${container.scrollLeft * 0.18}px, 0, 0)`;
       }
 
       const sections = document.querySelectorAll('.dynasty-section');

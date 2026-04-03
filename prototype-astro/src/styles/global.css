@@ -28,6 +28,58 @@
   }
 }
 
+/* ===== Ink Wash Background ===== */
+#ink-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  background-color: #0e0c09;
+}
+
+#ink-canvas {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  /* Wide enough so 18% parallax has room across full scroll */
+  width: 260vw;
+  will-change: transform;
+  background-color: #0e0c09;
+  background-image:
+    /* ── Left cluster: bold ink mountain mass ── */
+    radial-gradient(ellipse 18% 48% at 6% 42%, rgba(3,2,1,0.96) 0%, rgba(3,2,1,0.55) 42%, transparent 72%),
+    radial-gradient(ellipse 10% 28% at 13% 68%, rgba(4,3,1,0.7) 0%, transparent 62%),
+    /* mist glow framing left mass */
+    radial-gradient(ellipse 22% 18% at 16% 50%, rgba(52,44,30,0.38) 0%, transparent 68%),
+
+    /* ── Center-left: secondary peak + ink drip ── */
+    radial-gradient(ellipse 13% 38% at 28% 36%, rgba(3,2,1,0.9) 0%, rgba(3,2,1,0.4) 45%, transparent 70%),
+    radial-gradient(ellipse 7% 20% at 32% 62%, rgba(4,3,1,0.55) 0%, transparent 58%),
+
+    /* ── Horizon mist band (runs the full width) ── */
+    radial-gradient(ellipse 120% 10% at 50% 54%, rgba(40,34,22,0.42) 0%, transparent 85%),
+
+    /* ── Atmospheric moonlight glow, center-right ── */
+    radial-gradient(ellipse 28% 28% at 58% 38%, rgba(72,62,42,0.28) 0%, transparent 70%),
+
+    /* ── Center-right: large ink mass ── */
+    radial-gradient(ellipse 20% 45% at 64% 40%, rgba(3,2,1,0.93) 0%, rgba(3,2,1,0.5) 42%, transparent 72%),
+    radial-gradient(ellipse 9% 24% at 70% 65%, rgba(4,3,1,0.6) 0%, transparent 60%),
+    /* mist glow framing right mass */
+    radial-gradient(ellipse 20% 16% at 72% 50%, rgba(55,46,30,0.34) 0%, transparent 65%),
+
+    /* ── Far-right cluster ── */
+    radial-gradient(ellipse 16% 40% at 84% 44%, rgba(3,2,1,0.88) 0%, rgba(3,2,1,0.45) 44%, transparent 72%),
+    radial-gradient(ellipse 8% 18% at 90% 62%, rgba(4,3,1,0.5) 0%, transparent 58%),
+
+    /* ── Ground shadow (bottom) ── */
+    radial-gradient(ellipse 120% 22% at 50% 98%, rgba(2,1,0,0.75) 0%, transparent 75%),
+
+    /* ── Sky fade (top) ── */
+    radial-gradient(ellipse 120% 28% at 50% 0%, rgba(2,1,0,0.55) 0%, transparent 78%);
+}
+
 /* ===== Scroll Surface ===== */
 .scroll-surface {
   background-color: #f2e8d5;
