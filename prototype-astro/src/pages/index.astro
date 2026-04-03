@@ -56,12 +56,14 @@ import { dynasties } from '../data/dynasties';
 
         <!-- Dynasty sections -->
         {dynasties.map((dynasty, index) => (
-          <a
-            href={`${import.meta.env.BASE_URL}dynasty/${dynasty.slug}`}
+          <div
             class="dynasty-section scroll-reveal group relative z-10"
             data-era={dynasty.englishName}
           >
-            <div class="relative">
+            <a
+              href={`${import.meta.env.BASE_URL}dynasty/${dynasty.slug}`}
+              class="block relative"
+            >
               <p class="text-ink-light text-sm tracking-widest mb-3">{dynasty.period}</p>
 
               <h2 class="font-display text-4xl text-ink group-hover:text-vermillion transition-colors duration-500 mb-1">
@@ -79,11 +81,11 @@ import { dynasties } from '../data/dynasties';
               <span class="text-sm font-medium text-vermillion group-hover:text-vermillion/70 tracking-widest uppercase transition-colors duration-500">
                 探索 &rarr;
               </span>
-            </div>
+            </a>
 
             <div class="absolute top-1/2 left-8 -translate-y-1/2 w-1.5 h-1.5 rounded-full transition-all duration-500 group-hover:scale-[2.5]"
                  style={`background-color: ${dynasty.color}; opacity: 0.5;`}></div>
-          </a>
+          </div>
         ))}
 
         <!-- Closing section -->
