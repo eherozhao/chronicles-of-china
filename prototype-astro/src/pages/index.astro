@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { dynasties } from '../data/dynasties';
+---
+
+<Layout title="华夏春秋 | Chronicles of China" fullscreen={true}>
+  <!-- Fixed header overlay -->
+  <div class="fixed top-0 left-0 right-0 z-50 bg-night/80 backdrop-blur-md border-b border-gold/10">
+    <div class="flex items-center justify-between px-6 h-11">
+      <span class="font-heading text-sm tracking-widest text-scroll/80">华夏春秋</span>
+      <div class="flex items-center gap-4">
+        <span id="current-era" class="text-[10px] text-gold-light/60 tracking-widest uppercase transition-opacity duration-500"></span>
+        <span class="text-[10px] text-scroll/20 tracking-[0.3em] uppercase hidden sm:inline">Scroll to explore</span>
+      </div>
+    </div>
+    <div id="progress-bar" class="scroll-progress w-full" style="transform: scaleX(0);"></div>
+  </div>
+
+  <!-- Full-screen horizontal scroll -->
+  <div id="scroll-wrapper" class="fixed inset-0 pt-11 bg-night flex items-center">
+    <div id="scroll-container" class="scroll-container flex h-[75vh] cursor-grab select-none overflow-x-auto overflow-y-hidden">
+
+      <!-- Left spacing -->
+      <div class="flex-shrink-0 w-[15vw] flex items-center justify-end pr-2">
+        <div class="text-scroll/10 text-[10px] tracking-widest uppercase transform -rotate-90 whitespace-nowrap">
+          Begin
+        </div>
+      </div>
+
+      <!-- Left roller -->
+      <div class="scroll-roller"></div>
+
+      <!-- Scroll surface -->
+      <div id="scroll-surface" class="scroll-surface flex items-stretch relative">
+
+        <!-- Opening section -->
+        <div class="min-w-[500px] max-w-[500px] flex flex-col items-center justify-center px-12 text-center">
+          <p class="text-gold/50 text-[10px] tracking-[0.6em] uppercase mb-6">Chronicles of China</p>
+          <h1 class="font-heading text-6xl sm:text-7xl text-ink tracking-wider mb-4">华夏春秋</h1>
+          <div class="w-12 h-px bg-gold/30 mx-auto my-6"></div>
+          <p class="font-body text-ink-light text-sm leading-relaxed max-w-[280px]">
+            纵览五千年华夏文明<br/>从上古传说到现代中国
+          </p>
+          <p class="font-body text-ink-faint text-xs mt-3 tracking-wide">
+            Explore 5,000 years of Chinese civilization
+          </p>
+          <div class="mt-10 flex items-center gap-2 text-ink-faint/50 text-[10px] tracking-wider animate-pulse">
+            <span>&larr;</span>
+            <span>拖动卷轴</span>
+            <span>&rarr;</span>
+          </div>
+        </div>
+
+        <!-- Timeline thread -->
+        <div class="absolute left-0 right-0 top-1/2 timeline-thread pointer-events-none z-0"></div>
+
+        <!-- Dynasty sections -->
+        {dynasties.map((dynasty, index) => (
+          <a
+            href={`${import.meta.env.BASE_URL}dynasty/${dynasty.slug}`}
+            class="dynasty-section scroll-reveal group relative z-10"
+            data-era={dynasty.englishName}
+          >
+            <div class="relative">
+              <p class="text-ink-faint text-[10px] tracking-widest mb-3">{dynasty.period}</p>
+
+              <h2 class="font-display text-3xl text-ink group-hover:text-vermillion transition-colors duration-500 mb-1">
+                {dynasty.name}
+              </h2>
+              <p class="text-ink-faint text-xs tracking-wider mb-5">{dynasty.englishName}</p>
+
+              <div class="w-8 h-px mb-5 transition-all duration-500"
+                   style={`background-color: ${dynasty.color}; opacity: 0.4;`}></div>
+
+              <p class="font-body text-ink-light text-sm leading-[1.9] mb-5">
+                {dynasty.description}
+              </p>
+
+              <span class="text-[10px] text-gold/40 group-hover:text-vermillion/70 tracking-widest uppercase transition-colors duration-500">
+                探索 &rarr;
+              </span>
+            </div>
+
+            <div class="absolute top-1/2 left-8 -translate-y-1/2 w-1.5 h-1.5 rounded-full transition-all duration-500 group-hover:scale-[2.5]"
+                 style={`background-color: ${dynasty.color}; opacity: 0.5;`}></div>
+          </a>
+        ))}
+
+        <!-- Closing section -->
+        <div class="min-w-[400px] max-w-[400px] flex flex-col items-center justify-center px-12 text-center">
+          <div class="w-8 h-px bg-gold/20 mx-auto mb-8"></div>
+          <p class="font-heading text-3xl text-ink/60 tracking-wider mb-3">以史为鉴</p>
+          <p class="text-ink-faint text-xs tracking-wider">
+            Learn from history, illuminate the future
+          </p>
+        </div>
+      </div>
+
+      <!-- Right roller -->
+      <div class="scroll-roller"></div>
+
+      <!-- Right spacing -->
+      <div class="flex-shrink-0 w-[15vw] flex items-center pl-2">
+        <div class="text-scroll/10 text-[10px] tracking-widest uppercase transform -rotate-90 whitespace-nowrap">
+          End
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const container = document.getElementById('scroll-container');
+  const progressBar = document.getElementById('progress-bar');
+  const currentEra = document.getElementById('current-era');
+
+  if (container) {
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+    let dragDistance = 0;
+
+    container.addEventListener('mousedown', (e) => {
+      isDown = true;
+      dragDistance = 0;
+      container.classList.add('cursor-grabbing');
+      container.classList.remove('cursor-grab');
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+      e.preventDefault();
+    });
+
+    const stopDrag = () => {
+      isDown = false;
+      container.classList.remove('cursor-grabbing');
+      container.classList.add('cursor-grab');
+    };
+
+    container.addEventListener('mouseleave', stopDrag);
+    container.addEventListener('mouseup', stopDrag);
+
+    container.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      dragDistance++;
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.8;
+      container.scrollLeft = scrollLeft - walk;
+    });
+
+    container.addEventListener('click', (e) => {
+      if (dragDistance > 5) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY || e.deltaX;
+      container.scrollLeft += delta * 1.2;
+    }, { passive: false });
+
+    let touchStartX: number;
+    let touchScrollLeft: number;
+    container.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].pageX;
+      touchScrollLeft = container.scrollLeft;
+    }, { passive: true });
+    container.addEventListener('touchmove', (e) => {
+      const x = e.touches[0].pageX;
+      container.scrollLeft = touchScrollLeft - (x - touchStartX) * 1.5;
+    }, { passive: true });
+
+    container.addEventListener('scroll', () => {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const progress = container.scrollLeft / maxScroll;
+      if (progressBar) {
+        progressBar.style.transform = `scaleX(${progress})`;
+      }
+
+      const sections = document.querySelectorAll('.dynasty-section');
+      const containerRect = container.getBoundingClientRect();
+      const center = containerRect.left + containerRect.width / 2;
+
+      let closestSection: Element | null = null;
+      let closestDistance = Infinity;
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const sectionCenter = rect.left + rect.width / 2;
+        const distance = Math.abs(sectionCenter - center);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section;
+        }
+      });
+
+      if (closestSection && currentEra) {
+        const era = (closestSection as HTMLElement).dataset.era || '';
+        if (currentEra.textContent !== era) {
+          currentEra.style.opacity = '0';
+          setTimeout(() => {
+            currentEra.textContent = era;
+            currentEra.style.opacity = '1';
+          }, 200);
+        }
+      }
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: 0.2,
+        rootMargin: '0px 0px 0px -50px'
+      }
+    );
+
+    document.querySelectorAll('.scroll-reveal').forEach((el) => {
+      observer.observe(el);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') container.scrollLeft += 300;
+      if (e.key === 'ArrowLeft') container.scrollLeft -= 300;
+    });
+  }
+</script>

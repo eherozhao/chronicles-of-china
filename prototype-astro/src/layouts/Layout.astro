@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  fullscreen?: boolean;
+}
+
+const { title = '华夏春秋 | Chronicles of China', fullscreen = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="探索中华五千年文明史 — Explore 5,000 years of Chinese civilization" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x53F2;</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class={fullscreen ? 'overflow-hidden' : ''}>
+    {!fullscreen && (
+      <header class="bg-night-light/80 backdrop-blur-md sticky top-0 z-50 border-b border-gold/10">
+        <div class="max-w-6xl mx-auto px-6">
+          <div class="flex items-center justify-between h-12">
+            <a href={import.meta.env.BASE_URL} class="group flex items-center gap-3">
+              <span class="font-heading text-base tracking-widest text-scroll/90 group-hover:text-gold-light transition-colors">
+                华夏春秋
+              </span>
+              <span class="text-[9px] text-scroll/25 tracking-[0.4em] uppercase hidden sm:inline">
+                Chronicles of China
+              </span>
+            </a>
+            <nav class="flex items-center gap-5">
+              <a href={import.meta.env.BASE_URL} class="text-scroll/40 hover:text-gold-light transition-colors text-xs tracking-widest uppercase">
+                Timeline
+              </a>
+            </nav>
+          </div>
+        </div>
+      </header>
+    )}
+
+    <main>
+      <slot />
+    </main>
+
+    {!fullscreen && (
+      <footer class="bg-night border-t border-gold/5">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <p class="text-[10px] text-scroll/20 tracking-wider">
+            &copy; {new Date().getFullYear()} 华夏春秋
+          </p>
+          <p class="text-[10px] text-scroll/12 tracking-wider hidden sm:block">
+            Chronicles of China
+          </p>
+        </div>
+      </footer>
+    )}
+  </body>
+</html>
