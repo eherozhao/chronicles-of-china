@@ -34,7 +34,8 @@
   inset: 0;
   overflow: hidden;
   z-index: 0;
-  background-color: #ddd7cb;
+  /* fallback while image loads */
+  background-color: #2a3a2e;
 }
 
 #ink-canvas {
@@ -44,7 +45,12 @@
   left: 0;
   width: 260vw;
   will-change: transform;
-  /* SVG child handles all painting */
+  /* 千里江山图 — fills height, extends naturally across the wide canvas */
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+  /* slight dim so the parchment scroll pops in front */
+  filter: brightness(0.82) saturate(0.9);
 }
 
 /* ===== Scroll Surface ===== */

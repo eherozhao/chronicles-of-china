@@ -4,71 +4,9 @@ import { dynasties } from '../data/dynasties';
 ---
 
 <Layout title="华夏春秋 | Chronicles of China" fullscreen={true}>
-  <!-- Ink wash background -->
+  <!-- 千里江山图 background with parallax -->
   <div id="ink-bg" aria-hidden="true">
-    <div id="ink-canvas">
-      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <!-- Organic ink edge: turbulence warps the shapes into irregular strokes -->
-          <filter id="ink-heavy" x="-30%" y="-30%" width="160%" height="160%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.028 0.018" numOctaves="5" seed="12" result="noise"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="55" xChannelSelector="R" yChannelSelector="G" result="warped"/>
-            <feGaussianBlur in="warped" stdDeviation="5" result="blurred"/>
-          </filter>
-          <filter id="ink-medium" x="-25%" y="-25%" width="150%" height="150%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.032 0.022" numOctaves="4" seed="7" result="noise"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="38" xChannelSelector="R" yChannelSelector="G" result="warped"/>
-            <feGaussianBlur in="warped" stdDeviation="3.5"/>
-          </filter>
-          <filter id="mist" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="28"/>
-          </filter>
-          <filter id="wash" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="18"/>
-          </filter>
-        </defs>
-
-        <!-- Rice paper base -->
-        <rect width="100%" height="100%" fill="#dcd6c8"/>
-
-        <!-- Sky brightening — lightest at horizon line -->
-        <ellipse cx="50%" cy="-5%" rx="80%" ry="38%" fill="rgba(252,250,244,0.55)" filter="url(#mist)"/>
-
-        <!-- Horizon mist — white band where mountains meet sky -->
-        <ellipse cx="50%" cy="54%" rx="90%" ry="9%" fill="rgba(255,253,248,0.85)" filter="url(#mist)"/>
-
-        <!-- ── Left mountain cluster ── -->
-        <!-- main peak -->
-        <ellipse cx="8%" cy="36%" rx="9%" ry="30%" fill="rgba(14,9,4,0.88)" filter="url(#ink-heavy)"/>
-        <!-- secondary shoulder -->
-        <ellipse cx="14%" cy="44%" rx="6%" ry="20%" fill="rgba(14,9,4,0.72)" filter="url(#ink-heavy)"/>
-        <!-- ink drip / foot -->
-        <ellipse cx="10%" cy="70%" rx="5%" ry="12%" fill="rgba(14,9,4,0.58)" filter="url(#ink-medium)"/>
-
-        <!-- ── Center-left peak ── -->
-        <ellipse cx="30%" cy="30%" rx="8%" ry="26%" fill="rgba(14,9,4,0.84)" filter="url(#ink-heavy)"/>
-        <ellipse cx="35%" cy="55%" rx="5%" ry="14%" fill="rgba(14,9,4,0.55)" filter="url(#ink-medium)"/>
-
-        <!-- ── Center-right large mass ── -->
-        <ellipse cx="62%" cy="33%" rx="11%" ry="34%" fill="rgba(14,9,4,0.90)" filter="url(#ink-heavy)"/>
-        <!-- flanking ridge -->
-        <ellipse cx="70%" cy="42%" rx="6%" ry="20%" fill="rgba(14,9,4,0.68)" filter="url(#ink-heavy)"/>
-        <!-- foot splash -->
-        <ellipse cx="64%" cy="72%" rx="6%" ry="11%" fill="rgba(14,9,4,0.52)" filter="url(#ink-medium)"/>
-
-        <!-- ── Far-right cluster ── -->
-        <ellipse cx="85%" cy="38%" rx="9%" ry="28%" fill="rgba(14,9,4,0.82)" filter="url(#ink-heavy)"/>
-        <ellipse cx="91%" cy="50%" rx="5%" ry="16%" fill="rgba(14,9,4,0.60)" filter="url(#ink-medium)"/>
-
-        <!-- Ground ink wash — dark base fading up -->
-        <rect x="-5%" y="78%" width="110%" height="28%" fill="rgba(14,9,4,0.50)" filter="url(#wash)"/>
-
-        <!-- Subtle ink spatter dots — random small blobs -->
-        <circle cx="22%" cy="62%" r="1.2%" fill="rgba(14,9,4,0.35)" filter="url(#ink-medium)"/>
-        <circle cx="47%" cy="68%" r="0.8%" fill="rgba(14,9,4,0.30)" filter="url(#ink-medium)"/>
-        <circle cx="76%" cy="60%" r="1.0%" fill="rgba(14,9,4,0.28)" filter="url(#ink-medium)"/>
-      </svg>
-    </div>
+    <div id="ink-canvas" style={`background-image: url(${import.meta.env.BASE_URL}images/qianli-jiangshan.jpg)`}></div>
   </div>
 
   <!-- Fixed header overlay -->
