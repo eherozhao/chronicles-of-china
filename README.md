@@ -2,7 +2,7 @@
 
 A bilingual (Chinese/English) interactive website presenting Chinese history chronologically — from ancient legends through the founding of the People's Republic of China.
 
-**Live site:** https://eherozhao.github.io/historyIsFun/
+**Live site:** https://eherozhao.github.io/chronicles-of-china/
 
 ## Features
 
