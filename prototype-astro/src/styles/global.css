@@ -45,39 +45,40 @@
   /* Wide enough so 18% parallax has room across full scroll */
   width: 260vw;
   will-change: transform;
-  background-color: #0e0c09;
+  /* Warm mid-dark base — clearly not black, like aged paper in low light */
+  background-color: #2e2820;
   background-image:
-    /* ── Left cluster: bold ink mountain mass ── */
-    radial-gradient(ellipse 18% 48% at 6% 42%, rgba(3,2,1,0.96) 0%, rgba(3,2,1,0.55) 42%, transparent 72%),
-    radial-gradient(ellipse 10% 28% at 13% 68%, rgba(4,3,1,0.7) 0%, transparent 62%),
-    /* mist glow framing left mass */
-    radial-gradient(ellipse 22% 18% at 16% 50%, rgba(52,44,30,0.38) 0%, transparent 68%),
+    /* ── Left mountain mass — near-black ink ── */
+    radial-gradient(ellipse 18% 52% at 6% 42%, rgba(2,1,0,0.97) 0%, rgba(2,1,0,0.65) 40%, transparent 72%),
+    radial-gradient(ellipse 10% 30% at 14% 70%, rgba(2,1,0,0.8) 0%, transparent 62%),
+    /* bright amber mist halo framing left mass */
+    radial-gradient(ellipse 36% 28% at 22% 53%, rgba(185,148,72,0.72) 0%, rgba(140,110,52,0.38) 50%, transparent 78%),
 
-    /* ── Center-left: secondary peak + ink drip ── */
-    radial-gradient(ellipse 13% 38% at 28% 36%, rgba(3,2,1,0.9) 0%, rgba(3,2,1,0.4) 45%, transparent 70%),
-    radial-gradient(ellipse 7% 20% at 32% 62%, rgba(4,3,1,0.55) 0%, transparent 58%),
+    /* ── Center-left peak ── */
+    radial-gradient(ellipse 14% 42% at 30% 34%, rgba(2,1,0,0.95) 0%, rgba(2,1,0,0.5) 45%, transparent 70%),
+    radial-gradient(ellipse 7% 22% at 35% 64%, rgba(2,1,0,0.65) 0%, transparent 58%),
 
-    /* ── Horizon mist band (runs the full width) ── */
-    radial-gradient(ellipse 120% 10% at 50% 54%, rgba(40,34,22,0.42) 0%, transparent 85%),
+    /* ── Horizon mist band — warm amber glow across the full width ── */
+    radial-gradient(ellipse 140% 14% at 50% 56%, rgba(168,132,62,0.65) 0%, rgba(120,94,44,0.32) 55%, transparent 88%),
 
-    /* ── Atmospheric moonlight glow, center-right ── */
-    radial-gradient(ellipse 28% 28% at 58% 38%, rgba(72,62,42,0.28) 0%, transparent 70%),
+    /* ── Moon bloom — the brightest point ── */
+    radial-gradient(ellipse 40% 36% at 57% 42%, rgba(220,185,95,0.55) 0%, rgba(175,140,65,0.28) 52%, transparent 75%),
 
-    /* ── Center-right: large ink mass ── */
-    radial-gradient(ellipse 20% 45% at 64% 40%, rgba(3,2,1,0.93) 0%, rgba(3,2,1,0.5) 42%, transparent 72%),
-    radial-gradient(ellipse 9% 24% at 70% 65%, rgba(4,3,1,0.6) 0%, transparent 60%),
-    /* mist glow framing right mass */
-    radial-gradient(ellipse 20% 16% at 72% 50%, rgba(55,46,30,0.34) 0%, transparent 65%),
+    /* ── Center-right large mass ── */
+    radial-gradient(ellipse 20% 48% at 65% 37%, rgba(2,1,0,0.96) 0%, rgba(2,1,0,0.58) 40%, transparent 72%),
+    radial-gradient(ellipse 9% 25% at 71% 66%, rgba(2,1,0,0.68) 0%, transparent 60%),
+    /* bright amber mist halo — right */
+    radial-gradient(ellipse 32% 24% at 77% 53%, rgba(180,142,68,0.68) 0%, rgba(130,102,48,0.32) 52%, transparent 76%),
 
     /* ── Far-right cluster ── */
-    radial-gradient(ellipse 16% 40% at 84% 44%, rgba(3,2,1,0.88) 0%, rgba(3,2,1,0.45) 44%, transparent 72%),
-    radial-gradient(ellipse 8% 18% at 90% 62%, rgba(4,3,1,0.5) 0%, transparent 58%),
+    radial-gradient(ellipse 16% 44% at 86% 43%, rgba(2,1,0,0.93) 0%, rgba(2,1,0,0.5) 42%, transparent 72%),
+    radial-gradient(ellipse 8% 20% at 92% 64%, rgba(2,1,0,0.58) 0%, transparent 58%),
 
-    /* ── Ground shadow (bottom) ── */
-    radial-gradient(ellipse 120% 22% at 50% 98%, rgba(2,1,0,0.75) 0%, transparent 75%),
+    /* ── Ground shadow ── */
+    radial-gradient(ellipse 140% 28% at 50% 100%, rgba(1,0,0,0.88) 0%, transparent 72%),
 
-    /* ── Sky fade (top) ── */
-    radial-gradient(ellipse 120% 28% at 50% 0%, rgba(2,1,0,0.55) 0%, transparent 78%);
+    /* ── Sky vignette ── */
+    radial-gradient(ellipse 140% 32% at 50% 0%, rgba(1,0,0,0.72) 0%, transparent 78%);
 }
 
 /* ===== Scroll Surface ===== */
