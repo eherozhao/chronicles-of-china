@@ -3,6 +3,6 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   site: 'https://eherozhao.github.io',
-  base: '/historyIsFun/',
+  base: '/chronicles-of-china/',
   integrations: [tailwind()],
 });

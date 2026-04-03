@@ -4,7 +4,7 @@
 
 A content-first, statically generated Chinese history timeline website. Built with Astro and Tailwind CSS, deployed to GitHub Pages. Features a horizontal-scroll homepage listing 22 dynasties with dedicated detail pages per dynasty.
 
-Live site: `https://eherozhao.github.io/historyIsFun/`
+Live site: `https://eherozhao.github.io/chronicles-of-china/`
 
 ---
 
@@ -58,7 +58,7 @@ Pushes to `claude/chinese-history-website-dzHsE` trigger the GitHub Actions work
 | Styling     | Tailwind CSS 3.4     | Utility-first, custom design tokens          |
 | Language    | TypeScript 5         | Strict mode, path alias `@/*` → `src/*`      |
 | Fonts       | Google Fonts         | Zhi Mang Xing, Ma Shan Zheng, Noto Serif SC  |
-| Hosting     | GitHub Pages         | Subpath: `/historyIsFun/`                    |
+| Hosting     | GitHub Pages         | Subpath: `/chronicles-of-china/`                    |
 | CI/CD       | GitHub Actions       | Auto-deploy on branch push                   |
 
 ---
@@ -69,11 +69,11 @@ Pushes to `claude/chinese-history-website-dzHsE` trigger the GitHub Actions work
 All pages are pre-rendered at build time. `getStaticPaths()` in `[slug].astro` generates one page per dynasty from `dynasties.ts`. No server-side logic.
 
 ### Base URL Handling
-The site is served under `/historyIsFun/` on GitHub Pages. Always use `import.meta.env.BASE_URL` when constructing internal links, not hardcoded paths:
+The site is served under `/chronicles-of-china/` on GitHub Pages. Always use `import.meta.env.BASE_URL` when constructing internal links, not hardcoded paths:
 ```astro
 <a href={`${import.meta.env.BASE_URL}dynasty/${dynasty.slug}`}>
 ```
-This is configured in `astro.config.mjs` (`base: '/historyIsFun/'`).
+This is configured in `astro.config.mjs` (`base: '/chronicles-of-china/'`).
 
 ### JavaScript Strategy
 Minimal client-side JS. Interactive behavior (horizontal scroll, drag, keyboard nav, Intersection Observer reveals) lives in `<script>` tags within `.astro` files — no framework components. Preserve this zero-dependency approach unless a feature genuinely requires a component framework.
@@ -134,8 +134,8 @@ Follow "惜墨如金" (less ink, more meaning):
 
 | URL Pattern            | File                              |
 |------------------------|-----------------------------------|
-| `/historyIsFun/`       | `src/pages/index.astro`           |
-| `/historyIsFun/dynasty/:slug` | `src/pages/dynasty/[slug].astro` |
+| `/chronicles-of-china/`       | `src/pages/index.astro`           |
+| `/chronicles-of-china/dynasty/:slug` | `src/pages/dynasty/[slug].astro` |
 
 Slugs come from the `slug` field in `dynasties.ts`. Valid slugs: `shanggu`, `xia`, `shang`, `zhou`, `chunqiu`, `zhanguo`, `qin`, `han`, `sanguo`, `jin`, `nanbeichao`, `sui`, `tang`, `wudai`, `beisong`, `nansong`, `yuan`, `ming`, `qing`, `minguo`, `prc`.
 
@@ -183,7 +183,7 @@ Slugs come from the `slug` field in `dynasties.ts`. Valid slugs: `shanggu`, `xia
 ## Important Notes for AI Assistants
 
 - The working application is entirely within `prototype-astro/`. Do not create files at the repo root unless they are repo-level docs.
-- `astro.config.mjs` sets `base: '/historyIsFun/'` — this must remain consistent with the GitHub Pages deployment path. Do not change without also updating the workflow and repository settings.
+- `astro.config.mjs` sets `base: '/chronicles-of-china/'` — this must remain consistent with the GitHub Pages deployment path. Do not change without also updating the workflow and repository settings.
 - Client-side interactivity uses vanilla JS in `<script>` blocks. Do not introduce React, Vue, or other component frameworks without explicit direction.
 - The data file `src/data/dynasties.ts` is the canonical source; do not duplicate dynasty data elsewhere.
 - When modifying styles, check both `global.css` (base layer / custom classes) and `tailwind.config.mjs` (tokens) before adding new ones.
