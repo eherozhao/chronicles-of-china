@@ -10,7 +10,7 @@ import { dynasties } from '../data/dynasties';
       <span class="font-heading text-sm tracking-widest text-scroll/80">华夏春秋</span>
       <div class="flex items-center gap-4">
         <span id="current-era" class="text-[10px] text-gold-light/60 tracking-widest uppercase transition-opacity duration-500"></span>
-        <span class="text-[10px] text-scroll/20 tracking-[0.3em] uppercase hidden sm:inline">Scroll to explore</span>
+        <span class="text-[10px] text-scroll/70 tracking-[0.3em] uppercase hidden sm:inline">Scroll to explore</span>
       </div>
     </div>
     <div id="progress-bar" class="scroll-progress w-full" style="transform: scaleX(0);"></div>
@@ -35,16 +35,16 @@ import { dynasties } from '../data/dynasties';
 
         <!-- Opening section -->
         <div class="min-w-[500px] max-w-[500px] flex flex-col items-center justify-center px-12 text-center">
-          <p class="text-gold/50 text-[10px] tracking-[0.6em] uppercase mb-6">Chronicles of China</p>
+          <p class="text-gold text-xs tracking-[0.6em] uppercase mb-6">Chronicles of China</p>
           <h1 class="font-heading text-6xl sm:text-7xl text-ink tracking-wider mb-4">华夏春秋</h1>
           <div class="w-12 h-px bg-gold/30 mx-auto my-6"></div>
-          <p class="font-body text-ink-light text-sm leading-relaxed max-w-[280px]">
+          <p class="font-body text-ink text-base leading-relaxed max-w-[280px]">
             纵览五千年华夏文明<br/>从上古传说到现代中国
           </p>
-          <p class="font-body text-ink-faint text-xs mt-3 tracking-wide">
+          <p class="font-body text-ink-light text-sm mt-3 tracking-wide">
             Explore 5,000 years of Chinese civilization
           </p>
-          <div class="mt-10 flex items-center gap-2 text-ink-faint/50 text-[10px] tracking-wider animate-pulse">
+          <div class="mt-10 flex items-center gap-2 text-ink-light text-xs tracking-wider animate-pulse">
             <span>&larr;</span>
             <span>拖动卷轴</span>
             <span>&rarr;</span>
@@ -62,21 +62,21 @@ import { dynasties } from '../data/dynasties';
             data-era={dynasty.englishName}
           >
             <div class="relative">
-              <p class="text-ink-faint text-[10px] tracking-widest mb-3">{dynasty.period}</p>
+              <p class="text-ink-light text-xs tracking-widest mb-3">{dynasty.period}</p>
 
               <h2 class="font-display text-3xl text-ink group-hover:text-vermillion transition-colors duration-500 mb-1">
                 {dynasty.name}
               </h2>
-              <p class="text-ink-faint text-xs tracking-wider mb-5">{dynasty.englishName}</p>
+              <p class="text-ink-light text-sm tracking-wider mb-5">{dynasty.englishName}</p>
 
               <div class="w-8 h-px mb-5 transition-all duration-500"
-                   style={`background-color: ${dynasty.color}; opacity: 0.4;`}></div>
+                   style={`background-color: ${dynasty.color}; opacity: 0.6;`}></div>
 
-              <p class="font-body text-ink-light text-sm leading-[1.9] mb-5">
+              <p class="font-body text-ink text-base leading-[1.9] mb-5">
                 {dynasty.description}
               </p>
 
-              <span class="text-[10px] text-gold/40 group-hover:text-vermillion/70 tracking-widest uppercase transition-colors duration-500">
+              <span class="text-xs text-gold group-hover:text-vermillion tracking-widest uppercase transition-colors duration-500">
                 探索 &rarr;
               </span>
             </div>
@@ -89,8 +89,8 @@ import { dynasties } from '../data/dynasties';
         <!-- Closing section -->
         <div class="min-w-[400px] max-w-[400px] flex flex-col items-center justify-center px-12 text-center">
           <div class="w-8 h-px bg-gold/20 mx-auto mb-8"></div>
-          <p class="font-heading text-3xl text-ink/60 tracking-wider mb-3">以史为鉴</p>
-          <p class="text-ink-faint text-xs tracking-wider">
+          <p class="font-heading text-3xl text-ink tracking-wider mb-3">以史为鉴</p>
+          <p class="text-ink-light text-sm tracking-wider">
             Learn from history, illuminate the future
           </p>
         </div>
