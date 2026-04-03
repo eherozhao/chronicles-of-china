@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [claude/chinese-history-website-dzHsE]
+    branches: [claude/chinese-history-website-dzHsE, claude/add-claude-documentation-h1EKO]
   workflow_dispatch:
 
 permissions:
