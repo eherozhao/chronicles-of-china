@@ -41,6 +41,10 @@ const dynastyCollection = defineCollection({
       politics: z.array(AchievementItem).optional(),
       culture: z.array(AchievementItem).optional(),
     }).optional(),
+    references: z.object({
+      primary: z.array(z.string()).optional(),
+      secondary: z.array(z.string()).optional(),
+    }).optional(),
   }),
 });
 

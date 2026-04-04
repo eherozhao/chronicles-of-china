@@ -83,22 +83,19 @@ achievements:
       museum: Palace Museum, Beijing; National Palace Museum, Taipei
     - title: The Golden Age of Ci Poetry
       description: The ci lyric reached its artistic peak in the Song. Liu Yong extended the slow form; Su Shi broke its conventions with heroic themes; Li Qingzhao brought unmatched emotional precision. Together they define one of Chinese literature's greatest centuries.
+references:
+  primary:
+    - "Toqto'a et al. *Songshi* 宋史 (History of Song). Compiled 1343–1345 CE."
+    - "Li Tao. *Xu Zizhi Tongjian Changbian* 续资治通鉴长编. c. 1190 CE."
+    - "Shen Kuo. *Mengxi Bitan* 梦溪笔谈 (Dream Pool Essays). c. 1088 CE."
+    - "Zhang Zeduan. *Qingming Shanghe Tu* 清明上河图. c. 1085–1145 CE."
+  secondary:
+    - "Twitchett, Denis & Paul Jakov Smith (eds.). *The Cambridge History of China*, Vol. 5, Pt. 1. Cambridge University Press, 2009."
+    - "Kuhn, Dieter. *The Age of Confucian Rule*. Harvard University Press, 2009."
+    - "Ebrey, Patricia. *Emperor Huizong*. Harvard University Press, 2014."
+    - "Hartwell, Robert M. 'Demographic, Political, and Social Transformations of China, 750–1550.' *Harvard Journal of Asiatic Studies* 42.2 (1982)."
 ---
 
 In 960, the military commander Zhao Kuangyin was proclaimed emperor by his troops at Chenqiao and founded the Song Dynasty, establishing its capital at Bianjing (modern Kaifeng). Drawing on the lesson of the Tang's collapse, he demilitarised the state and elevated civil officials above military commanders — a policy that held for the dynasty's entire 167-year lifespan. The Northern Song reached the heights of Chinese economic and cultural achievement before the catastrophic Jingkang Incident of 1127, when Jurchen Jin forces sacked Bianjing and the court fled south.
 
 Song China produced an estimated 25–30% of global GDP. Movable type printing, the magnetic compass, gunpowder weapons, and paper money all matured in this era. In literature, the *ci* lyric reached its artistic peak; in ceramics, the five great kilns produced work that has never been surpassed.
-
-## References
-
-**Primary Sources**
-- Toqto'a et al. *Songshi* 宋史 (History of Song). Compiled 1343–1345 CE.
-- Li Tao. *Xu Zizhi Tongjian Changbian* 续资治通鉴长编. c. 1190 CE.
-- Shen Kuo. *Mengxi Bitan* 梦溪笔谈 (Dream Pool Essays). c. 1088 CE.
-- Zhang Zeduan. *Qingming Shanghe Tu* 清明上河图. c. 1085–1145 CE.
-
-**Secondary Scholarship**
-- Twitchett, Denis & Paul Jakov Smith (eds.). *The Cambridge History of China*, Vol. 5, Pt. 1. Cambridge University Press, 2009.
-- Kuhn, Dieter. *The Age of Confucian Rule*. Harvard University Press, 2009.
-- Ebrey, Patricia. *Emperor Huizong*. Harvard University Press, 2014.
-- Hartwell, Robert M. "Demographic, Political, and Social Transformations of China, 750–1550." *Harvard Journal of Asiatic Studies* 42.2 (1982).

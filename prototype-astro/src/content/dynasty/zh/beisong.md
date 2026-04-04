@@ -83,23 +83,20 @@ achievements:
       museum: 故宫博物院，北京；台北故宫博物院
     - title: 宋词的黄金时代
       description: 词作为音乐文学在宋代达到巅峰。柳永开慢词先河，苏轼开豪放词派，李清照婉约词冠绝古今，三者共同确立了宋词在中国文学史上的崇高地位。
+references:
+  primary:
+    - "脱脱等《宋史》，元至正三年至五年（1343–1345年）成书"
+    - "李焘《续资治通鉴长编》，宋绍熙年间（约1190年）成书"
+    - "沈括《梦溪笔谈》，北宋绍圣元年（1094年）前后成书"
+    - "张择端《清明上河图》（绘画史料），约1085–1145年"
+  secondary:
+    - "Twitchett, Denis & Paul Jakov Smith (eds.). *The Cambridge History of China*, Vol. 5, Pt. 1. Cambridge University Press, 2009."
+    - "Kuhn, Dieter. *The Age of Confucian Rule: The Song Transformation of China*. Harvard University Press, 2009."
+    - "Ebrey, Patricia. *Emperor Huizong*. Harvard University Press, 2014."
+    - "漆侠《宋代经济史》，上海人民出版社，1987年。"
 ---
 
 
 960年，后周殿前都点检赵匡胤在陈桥驿发动兵变，建立宋朝，定都汴京。他吸取唐末藩镇之乱的教训，以"杯酒释兵权"解除武将兵权，确立重文轻武的基本国策。此后一百六十七年间，北宋在制度、经济与文化上达到中国封建社会的高峰，直至1127年靖康之变，金兵攻破汴京，皇室南渡，北宋灭亡。
 
 宋代GDP估计占当时全球总量的25%至30%，长安、汴京等城市夜市通宵不绝，活字印刷、指南针、火药与纸币在这一时期走向成熟，文学则以宋词的繁荣为最高成就。
-
-## 参考资料
-
-**原始文献**
-- 脱脱等《宋史》，元至正三年至五年（1343–1345年）成书
-- 李焘《续资治通鉴长编》，宋绍熙年间（约1190年）成书
-- 沈括《梦溪笔谈》，北宋绍圣元年（1094年）前后成书
-- 张择端《清明上河图》（绘画史料），约1085–1145年
-
-**现代学术著作**
-- Twitchett, Denis & Paul Jakov Smith (eds.). *The Cambridge History of China*, Vol. 5, Pt. 1. Cambridge University Press, 2009.
-- Kuhn, Dieter. *The Age of Confucian Rule: The Song Transformation of China*. Harvard University Press, 2009.
-- Ebrey, Patricia. *Emperor Huizong*. Harvard University Press, 2014.
-- 漆侠《宋代经济史》，上海人民出版社，1987年。

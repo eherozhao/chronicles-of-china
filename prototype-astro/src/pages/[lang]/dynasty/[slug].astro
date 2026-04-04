@@ -32,9 +32,10 @@ const otherLangLabel = lang === 'zh' ? 'English' : '中文';
 const rendered = entry ? await entry.render() : null;
 const Content = rendered?.Content;
 
-const figures = entry?.data.figures ?? [];
-const events  = entry?.data.events  ?? [];
+const figures      = entry?.data.figures      ?? [];
+const events       = entry?.data.events       ?? [];
 const achievements = entry?.data.achievements ?? null;
+const references   = entry?.data.references   ?? null;
 
 const isZh = lang === 'zh';
 const L = {
@@ -131,8 +132,8 @@ const eventsJson  = JSON.stringify(events);
                          style={`background-color: ${dynasty.color}; opacity:0.85;`}>
                       {figure.name[0]}
                     </div>
-                    <!-- person name: font-heading OK -->
-                    <p class="font-heading text-base text-ink group-hover:text-vermillion
+                    <!-- person name: body font in card, heading font only in avatar -->
+                    <p class="body-text font-semibold text-ink group-hover:text-vermillion
                               transition-colors leading-snug">
                       {figure.name}
                     </p>
@@ -272,6 +273,42 @@ const eventsJson  = JSON.stringify(events);
             </>
           )}
 
+          <!-- 参考资料 / References — always last -->
+          {references && (
+            <div class="mb-16 pt-10 border-t border-gold/10">
+              <h2 class="text-xs font-body font-semibold tracking-[0.12em] uppercase
+                         text-ink-faint mb-5">
+                {isZh ? '参考资料' : 'References'}
+              </h2>
+              {references.primary && references.primary.length > 0 && (
+                <div class="mb-4">
+                  <p class="text-xs text-gold/50 tracking-widest uppercase mb-2">
+                    {isZh ? '原始文献' : 'Primary Sources'}
+                  </p>
+                  <ul class="space-y-1.5">
+                    {references.primary.map(r => (
+                      <li class="text-xs text-ink-faint leading-relaxed"
+                          set:html={r.replace(/\*(.*?)\*/g, '<em>$1</em>')} />
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {references.secondary && references.secondary.length > 0 && (
+                <div>
+                  <p class="text-xs text-gold/50 tracking-widest uppercase mb-2">
+                    {isZh ? '现代学术著作' : 'Secondary Scholarship'}
+                  </p>
+                  <ul class="space-y-1.5">
+                    {references.secondary.map(r => (
+                      <li class="text-xs text-ink-faint leading-relaxed"
+                          set:html={r.replace(/\*(.*?)\*/g, '<em>$1</em>')} />
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
           <!-- Prev / Next -->
           <nav class="flex items-center justify-between pt-10 border-t border-gold/15 mt-10">
             {prev ? (
@@ -406,7 +443,7 @@ const eventsJson  = JSON.stringify(events);
         <div class="w-14 h-14 rounded-full flex items-center justify-center mb-4
                     font-serif text-2xl text-white font-bold"
              style="background-color:${dynastyColor};">${f.name[0]}</div>
-        <p style="font-family:Georgia,serif;font-size:1.25rem;font-weight:600;
+        <p style="font-family:system-ui,sans-serif;font-size:1.1rem;font-weight:600;
                   color:#2c2418;margin-bottom:0.25rem;">${f.name}</p>
         ${f.englishName ? `<p style="font-size:0.8rem;color:#8a7a68;margin-bottom:0.25rem;">${f.englishName}</p>` : ''}
         <p style="font-size:0.8rem;color:#6a5a48;margin-bottom:0.25rem;">${f.role}</p>
