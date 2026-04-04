@@ -35,3 +35,17 @@ color: "#2B4490"
 ## 靖康之变
 
 1127年，女真族建立的金朝大军南下，攻破汴京，掳走徽宗、钦宗二帝，史称"靖康之耻"。北宋就此灭亡，皇室南渡，建都临安（今杭州），是为南宋。
+
+## 参考资料
+
+**原始文献**
+- 脱脱等《宋史》，元至正三年至五年（1343–1345年）成书
+- 李焘《续资治通鉴长编》，宋绍熙年间（约1190年）成书
+- 沈括《梦溪笔谈》，北宋绍圣元年（1094年）前后成书
+- 张择端《清明上河图》（绘画史料），约1085–1145年
+
+**现代学术著作**
+- Twitchett, Denis & Paul Jakov Smith (eds.). *The Cambridge History of China*, Vol. 5, Pt. 1: *The Sung Dynasty and Its Precursors*. Cambridge University Press, 2009.
+- Kuhn, Dieter. *The Age of Confucian Rule: The Song Transformation of China*. Harvard University Press, 2009.
+- Ebrey, Patricia. *Emperor Huizong*. Harvard University Press, 2014.
+- 漆侠《宋代经济史》，上海人民出版社，1987年。

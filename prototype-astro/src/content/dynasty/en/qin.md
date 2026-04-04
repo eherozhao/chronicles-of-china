@@ -38,3 +38,16 @@ From early in his reign, the emperor ordered the construction of a vast mausoleu
 ## A Brief Dynasty, an Enduring Template
 
 The Qin Dynasty lasted barely fifteen years. Brutal taxation, forced labour, and the upheaval of unification sparked a series of rebellions. By 206 BCE the dynasty had collapsed. Yet its institutional legacy proved indestructible. The Han Dynasty that followed inherited — and refined — the commandery-county system, the emperor-bureaucracy apparatus, and the ideal of centralised imperial rule. Historians summarise it simply: *Han inherited Qin's institutions.* The basic grammar of Chinese governance, from the commandery to the civil service exam, flows from this brief, violent dynasty.
+
+## References
+
+**Primary Sources**
+- Sima Qian. *Shiji* 史记, "Basic Annals of Qin Shi Huang" (秦始皇本纪). c. 109–91 BCE.
+- Sima Qian. *Shiji*, "Biography of Li Si" (李斯列传).
+- Ban Gu. *Hanshu* 汉书, "Biography of Jia Yi" — includes the essay *Faults of Qin* (过秦论).
+
+**Secondary Scholarship**
+- Bodde, Derk. "The State and Empire of Ch'in." *The Cambridge History of China*, Vol. 1. Cambridge University Press, 1986.
+- Lewis, Mark Edward. *The Early Chinese Empires: Qin and Han*. Harvard University Press, 2007.
+- Kern, Martin. *The Stele Inscriptions of Ch'in Shih-huang*. American Oriental Society, 2000.
+- Cotterell, Arthur. *The First Emperor of China*. Macmillan, 1981.

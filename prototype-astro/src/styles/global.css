@@ -288,3 +288,33 @@
   color: #5a4a35;
   font-style: italic;
 }
+
+/* ===== References section styling ===== */
+.prose-dynasty h2:last-of-type,
+.prose-dynasty h2.references-heading {
+  font-size: 0.85rem;
+  color: #7a6a55;
+  margin-top: 3.5rem;
+  border-left-color: rgba(166, 124, 61, 0.3);
+}
+
+.prose-dynasty h2:last-of-type ~ p,
+.prose-dynasty h2:last-of-type ~ ul {
+  font-size: 0.8rem;
+  color: #8a7a68;
+  line-height: 1.75;
+}
+
+.prose-dynasty h2:last-of-type ~ ul li {
+  margin-bottom: 0.35rem;
+}
+
+.prose-dynasty h2:last-of-type ~ h3 {
+  font-size: 0.78rem;
+  color: #8a7a68;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

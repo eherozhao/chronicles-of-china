@@ -35,3 +35,17 @@ Song culture was both refined and intellectually restless. Neo-Confucianism — 
 ## The Jingkang Catastrophe
 
 In 1125, the Jurchen Jin Dynasty — former allies against the Liao — turned their armies south. In 1127, Bianjing fell. Emperors Huizong and Qinzong, along with thousands of courtiers and palace women, were marched north into captivity. The *Jingkang Humiliation* (靖康之耻) ended the Northern Song. A remnant court fled south, eventually establishing a new capital at Lin'an (present-day Hangzhou) — the beginning of the Southern Song.
+
+## References
+
+**Primary Sources**
+- Toqto'a et al. *Songshi* 宋史 (History of Song). Compiled 1343–1345 CE.
+- Li Tao. *Xu Zizhi Tongjian Changbian* 续资治通鉴长编 (Long Draft Continuation of the Comprehensive Mirror). c. 1190 CE.
+- Shen Kuo. *Mengxi Bitan* 梦溪笔谈 (Dream Pool Essays). c. 1088 CE.
+- Zhang Zeduan. *Qingming Shanghe Tu* 清明上河图 (Along the River During the Qingming Festival). c. 1085–1145 CE.
+
+**Secondary Scholarship**
+- Twitchett, Denis & Paul Jakov Smith (eds.). *The Cambridge History of China*, Vol. 5, Pt. 1: *The Sung Dynasty and Its Precursors*. Cambridge University Press, 2009.
+- Kuhn, Dieter. *The Age of Confucian Rule: The Song Transformation of China*. Harvard University Press, 2009.
+- Ebrey, Patricia. *Emperor Huizong*. Harvard University Press, 2014.
+- Hartwell, Robert M. "Demographic, Political, and Social Transformations of China, 750–1550." *Harvard Journal of Asiatic Studies* 42.2 (1982).

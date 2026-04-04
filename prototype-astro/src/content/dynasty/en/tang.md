@@ -35,3 +35,17 @@ In 755, the general An Lushan launched a devastating rebellion that lasted eight
 ## Legacy
 
 The Tang Dynasty's reach extended far beyond its borders. Japan's Nara period was consciously modelled on Tang institutions, architecture, and writing. The Silla kingdom of Korea sent hundreds of students to study in Chang'an. Across Asia, "Tang" became synonymous with Chinese civilisation — a reputation preserved today in the Cantonese word for Chinatown: *Tong yan gaai* (唐人街), "the street of Tang people."
+
+## References
+
+**Primary Sources**
+- Liu Xu et al. *Jiu Tangshu* 旧唐书 (Old Book of Tang). Compiled 941 CE.
+- Ouyang Xiu & Song Qi. *Xin Tangshu* 新唐书 (New Book of Tang). Compiled 1060 CE.
+- Sima Guang. *Zizhi Tongjian* 资治通鉴 (Comprehensive Mirror in Aid of Governance), vols. 182–265. Compiled 1084 CE.
+- *Quan Tangshi* 全唐诗 (Complete Tang Poems). Imperial compilation, 1705.
+
+**Secondary Scholarship**
+- Twitchett, Denis (ed.). *The Cambridge History of China*, Vol. 3: *Sui and T'ang China, 589–906*. Cambridge University Press, 1979.
+- Benn, Charles. *China's Golden Age: Everyday Life in the Tang Dynasty*. Oxford University Press, 2004.
+- Owen, Stephen. *The Great Age of Chinese Poetry: The High T'ang*. Yale University Press, 1981.
+- Pulleyblank, Edwin G. *The Background of the Rebellion of An Lu-shan*. Oxford University Press, 1955.

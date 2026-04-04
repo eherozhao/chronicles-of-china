@@ -35,3 +35,17 @@ color: "#C8A45C"
 ## 文化遗产
 
 唐朝的影响超越了时间与地域。日本奈良时代大量借鉴唐制，朝鲜半岛的新罗以长安为蓝本建设王京。唐三彩、唐诗、唐人街——这个朝代的名字至今仍是中华文明对外的一张名片。
+
+## 参考资料
+
+**原始文献**
+- 刘昫等《旧唐书》，后晋天福六年（941年）成书
+- 欧阳修、宋祁《新唐书》，宋嘉祐五年（1060年）成书
+- 司马光《资治通鉴》卷182–265，宋元丰七年（1084年）成书
+- 《全唐诗》，清康熙四十四年（1705年）敕编
+
+**现代学术著作**
+- Twitchett, Denis (ed.). *The Cambridge History of China*, Vol. 3: *Sui and T'ang China, 589–906*. Cambridge University Press, 1979.
+- Benn, Charles. *China's Golden Age: Everyday Life in the Tang Dynasty*. Oxford University Press, 2004.
+- Owen, Stephen. *The Great Age of Chinese Poetry: The High T'ang*. Yale University Press, 1981.
+- 岑仲勉《隋唐史》，中华书局，1982年。
