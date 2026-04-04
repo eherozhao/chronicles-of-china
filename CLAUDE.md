@@ -100,6 +100,25 @@ The array in `dynasties.ts` is the single source of truth — all pages are gene
 
 ---
 
+## Historical Terminology
+
+When writing English names for dynasties and periods, use the established academic terms used in sinology and English-language historiography. Do not truncate or paraphrase. Key terms:
+
+| Chinese | Correct English Term | Notes |
+|---------|---------------------|-------|
+| 五代十国 | Five Dynasties and Ten Kingdoms | Not "Five Dynasties" alone — the Ten Kingdoms (南方十国) are part of the period |
+| 春秋 | Spring and Autumn period | |
+| 战国 | Warring States period | |
+| 南北朝 | Northern and Southern Dynasties | |
+| 魏晋南北朝 | Wei, Jin, Northern and Southern Dynasties | When referring to the full era |
+| 三国 | Three Kingdoms | |
+| 中华民国 | Republic of China | |
+| 中华人民共和国 | People's Republic of China | |
+
+When in doubt, prefer the phrasing used by the *Cambridge History of China* or the *Encyclopedia of China*.
+
+---
+
 ## Design System
 
 ### Color Palette (Tailwind custom tokens)

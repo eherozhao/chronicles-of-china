@@ -4,13 +4,15 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   fullscreen?: boolean;
+  lang?: 'zh' | 'en';
 }
 
-const { title = '华夏春秋 | Chronicles of China', fullscreen = false } = Astro.props;
+const { title = '华夏春秋 | Chronicles of China', fullscreen = false, lang } = Astro.props;
+const htmlLang = lang === 'en' ? 'en' : 'zh-CN';
 ---
 
 <!doctype html>
-<html lang="zh-CN" class={fullscreen ? 'overflow-hidden' : ''}>
+<html lang={htmlLang} class={fullscreen ? 'overflow-hidden' : ''}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

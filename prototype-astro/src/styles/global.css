@@ -212,3 +212,79 @@
   border-left: 2px solid #a67c3d;
   padding-left: 1rem;
 }
+
+/* ===== Markdown prose for dynasty content pages ===== */
+.prose-dynasty {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  color: #3a2f1e;
+  line-height: 1.95;
+  font-size: 1rem;
+}
+
+.prose-dynasty h2 {
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c2418;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  border-left: 2px solid #a67c3d;
+  padding-left: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.prose-dynasty h2:first-child {
+  margin-top: 0;
+}
+
+.prose-dynasty h3 {
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #3a2f1e;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.prose-dynasty p {
+  margin-bottom: 1.4rem;
+}
+
+.prose-dynasty ul,
+.prose-dynasty ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.prose-dynasty li {
+  margin-bottom: 0.6rem;
+}
+
+.prose-dynasty ul li {
+  list-style-type: disc;
+}
+
+.prose-dynasty strong {
+  font-weight: 700;
+  color: #2c2418;
+}
+
+.prose-dynasty em {
+  font-style: italic;
+  color: #5a4a35;
+}
+
+.prose-dynasty hr {
+  border: none;
+  border-top: 1px solid rgba(166, 124, 61, 0.2);
+  margin: 2.5rem 0;
+}
+
+.prose-dynasty blockquote {
+  border-left: 3px solid rgba(166, 124, 61, 0.4);
+  padding-left: 1.25rem;
+  margin-left: 0;
+  color: #5a4a35;
+  font-style: italic;
+}

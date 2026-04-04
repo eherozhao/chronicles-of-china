@@ -138,7 +138,7 @@ export const dynasties: Dynasty[] = [
   {
     slug: 'wudai',
     name: '五代十国',
-    englishName: 'Five Dynasties',
+    englishName: 'Five Dynasties and Ten Kingdoms',
     period: '907–979',
     years: [907, 979],
     description: '唐亡后中原政权更迭频繁，南方十国相对安定，文化中心南移。',

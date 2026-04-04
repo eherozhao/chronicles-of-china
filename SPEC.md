@@ -215,6 +215,17 @@ sources:
 - [ ] Accessibility audit (WCAG 2.1 AA)
 - [ ] Social sharing (Open Graph images per dynasty)
 
+### M7: Custom Domain
+- [ ] Register a domain (e.g. `chroniclesofchina.com` or `huaxiachunqiu.com`) from a registrar (Namecheap, Cloudflare Registrar, etc.)
+- [ ] Add `prototype-astro/public/CNAME` file containing just the domain name (e.g. `chroniclesofchina.com`)
+- [ ] Update `astro.config.mjs`: change `site` to `https://yourcustomdomain.com` and `base` to `'/'`
+- [ ] Update all hardcoded references to `/chronicles-of-china/` if any remain
+- [ ] Configure DNS at registrar:
+  - Add four A records pointing `@` to GitHub Pages IPs: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+  - Add a CNAME record pointing `www` to `eherozhao.github.io`
+- [ ] In GitHub repo Settings → Pages, verify custom domain is detected and enable "Enforce HTTPS"
+- [ ] Test that both `www.` and apex domain redirect correctly
+
 ---
 
 ## Image & Copyright Policy
