@@ -6,6 +6,10 @@ export interface Dynasty {
   years: [number, number];
   description: string;
   color: string;
+  /** Optional hero background artwork (path relative to public/) */
+  artwork?: string;
+  /** CSS background-position for the artwork, e.g. "center 30%" */
+  artworkPosition?: string;
 }
 
 export const dynasties: Dynasty[] = [
@@ -152,6 +156,8 @@ export const dynasties: Dynasty[] = [
     years: [960, 1127],
     description: '经济文化空前繁荣，活字印刷、火药、指南针，清明上河图描绘盛世。',
     color: '#2B4490',
+    artwork: 'images/qianli-jiangshan.jpg',
+    artworkPosition: 'center 40%',
   },
   {
     slug: 'nansong',
