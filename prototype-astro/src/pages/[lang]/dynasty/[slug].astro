@@ -32,168 +32,440 @@ const otherLangLabel = lang === 'zh' ? 'English' : '中文';
 const rendered = entry ? await entry.render() : null;
 const Content = rendered?.Content;
 
+const figures      = entry?.data.figures      ?? [];
+const events       = entry?.data.events       ?? [];
+const achievements = entry?.data.achievements ?? null;
+const references   = entry?.data.references   ?? null;
+
 const isZh = lang === 'zh';
-const labels = {
-  overview: isZh ? '简介' : 'Overview',
-  figures: isZh ? '重要人物' : 'Key Figures',
-  events: isZh ? '重大事件' : 'Key Events',
-  culture: isZh ? '文化成就' : 'Culture',
-  backToTimeline: isZh ? '回到卷轴' : 'Back to Timeline',
-  previous: isZh ? '上一朝' : 'Previous',
-  next: isZh ? '下一朝' : 'Next',
-  noContent: isZh ? '内容正在整理中，敬请期待。' : 'Content coming soon.',
+const L = {
+  overview:   isZh ? '简介'   : 'Overview',
+  figures:    isZh ? '重要人物' : 'Key Figures',
+  events:     isZh ? '重大事件' : 'Key Events',
+  culture:    isZh ? '文化成就' : 'Cultural Achievements',
+  economy:    isZh ? '经济'   : 'Economy',
+  politics:   isZh ? '政治'   : 'Politics',
+  cultureSub: isZh ? '文化'   : 'Culture',
+  artifact:   isZh ? '文物'   : 'Artifact',
+  museum:     isZh ? '馆藏'   : 'Collection',
+  back:       isZh ? '回到卷轴' : 'Back to Timeline',
+  prev:       isZh ? '上一朝'  : 'Previous',
+  next:       isZh ? '下一朝'  : 'Next',
+  comingSoon: isZh ? '内容正在整理中，敬请期待。' : 'Content coming soon.',
 };
+
+const figuresJson = JSON.stringify(figures);
+const eventsJson  = JSON.stringify(events);
 ---
 
 <Layout title={`${dynasty.name} ${dynasty.englishName} | 华夏春秋`} lang={lang}>
+
+  <!-- ── HERO ── -->
   <section class="bg-night relative">
-    <div
-      class="absolute inset-0 opacity-[0.03] pointer-events-none"
-      style={`background: radial-gradient(ellipse at 50% 30%, ${dynasty.color}, transparent 60%);`}
-    ></div>
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none"
+         style={`background: radial-gradient(ellipse at 50% 30%, ${dynasty.color}, transparent 60%);`}></div>
 
     <div class="relative z-10 max-w-2xl mx-auto px-6 py-20 sm:py-28 text-center">
       <div class="w-8 h-px mx-auto mb-8" style={`background-color: ${dynasty.color}; opacity: 0.5;`}></div>
 
-      <h1 class="font-heading text-6xl sm:text-8xl text-scroll tracking-wider mb-3">
+      <h1 class="font-heading text-7xl sm:text-9xl text-scroll tracking-wider mb-4">
         {dynasty.name}
       </h1>
-      <p class="font-body text-scroll/30 text-sm tracking-[0.25em]">
-        {dynasty.englishName}
-      </p>
+      <p class="font-body text-scroll/50 text-xl tracking-[0.2em]">{dynasty.englishName}</p>
 
       <div class="w-10 h-px bg-gold/20 mx-auto my-8"></div>
 
-      <p class="text-gold-light/60 text-base font-heading tracking-wider">
-        {dynasty.period}
-      </p>
+      <p class="text-gold-light/70 text-3xl font-heading tracking-wider">{dynasty.period}</p>
 
-      <!-- Language toggle -->
-      <div class="mt-8 flex items-center justify-center gap-2">
-        <span class="text-scroll/50 text-xs tracking-widest">
-          {lang === 'zh' ? '中文' : 'English'}
-        </span>
-        <span class="text-scroll/20 text-xs">|</span>
-        <a
-          href={`${import.meta.env.BASE_URL}${otherLang}/dynasty/${slug}`}
-          class="text-gold/50 hover:text-gold transition-colors text-xs tracking-widest"
-        >
+      <div class="mt-8 flex items-center justify-center gap-3">
+        <span class="text-scroll/60 text-lg tracking-widest">{lang === 'zh' ? '中文' : 'English'}</span>
+        <span class="text-scroll/25 text-lg">|</span>
+        <a href={`${import.meta.env.BASE_URL}${otherLang}/dynasty/${slug}`}
+           class="text-gold/60 hover:text-gold transition-colors text-lg tracking-widest">
           {otherLangLabel}
         </a>
       </div>
     </div>
   </section>
 
+  <!-- ── CONTENT ── -->
   <section class="scroll-surface">
     <div class="max-w-2xl mx-auto px-6 py-16 sm:py-20">
 
-      {Content ? (
-        <!-- Rendered Markdown content -->
-        <div class="prose-dynasty">
-          <Content />
-        </div>
-      ) : (
-        <!-- Skeleton / placeholder when no Markdown file exists yet -->
-        <div>
-          <div class="mb-14">
-            <h2 class="font-heading text-xl text-ink mb-5 gold-left-accent">
-              {labels.overview}
+          <!-- 简介 -->
+          <div class="mb-16">
+            <h2 class="section-heading">
+              {L.overview}
+              <span class="section-heading-en">Overview</span>
             </h2>
-            <p class="font-body text-ink-light leading-[1.9] text-base">
-              {dynasty.description}
-            </p>
-            {!entry && (
-              <p class="mt-6 text-xs text-ink-faint italic">{labels.noContent}</p>
+            {Content ? (
+              <div class="prose-dynasty"><Content /></div>
+            ) : (
+              <>
+                <p class="body-text">{dynasty.description}</p>
+                <p class="mt-6 text-sm text-ink-faint italic">{L.comingSoon}</p>
+              </>
             )}
           </div>
 
-          <div class="grid sm:grid-cols-2 gap-8 mb-14">
-            <div>
-              <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
-                {labels.figures}
-              </h3>
-              <div class="mt-4 space-y-4">
-                {[1, 2, 3].map(() => (
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-scroll-dark"></div>
-                    <div class="flex-1">
-                      <div class="h-2.5 bg-scroll-dark rounded w-20"></div>
-                      <div class="h-2 bg-scroll-dark/60 rounded w-28 mt-2"></div>
+          <!-- 重要人物 -->
+          {figures.length > 0 && (
+            <div class="mb-16">
+              <h2 class="section-heading">
+                {L.figures}
+                <span class="section-heading-en">Key Figures</span>
+              </h2>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {figures.map((figure, i) => (
+                  <button
+                    class="figure-card text-left p-4 rounded bg-scroll-dark/40 hover:bg-scroll-dark
+                           transition-colors duration-200 group cursor-pointer"
+                    data-index={i}
+                  >
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3
+                                font-heading text-xl text-scroll"
+                         style={`background-color: ${dynasty.color}; opacity:0.85;`}>
+                      {figure.name[0]}
                     </div>
-                  </div>
+                    <!-- person name: body font in card, heading font only in avatar -->
+                    <p class="body-text font-semibold text-ink group-hover:text-vermillion
+                              transition-colors leading-snug">
+                      {figure.name}
+                    </p>
+                    {figure.englishName && (
+                      <p class="body-text-sm mt-0.5">{figure.englishName}</p>
+                    )}
+                    <p class="body-text-sm mt-1">{figure.role}</p>
+                    {figure.years && (
+                      <p class="text-sm text-gold/60 mt-1">{figure.years}</p>
+                    )}
+                  </button>
                 ))}
               </div>
             </div>
+          )}
 
-            <div>
-              <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
-                {labels.events}
-              </h3>
-              <div class="mt-4 space-y-4">
-                {[1, 2, 3].map(() => (
-                  <div class="flex items-center gap-3">
-                    <div class="w-1.5 h-1.5 rounded-full bg-gold/30"></div>
-                    <div class="flex-1">
-                      <div class="h-2.5 bg-scroll-dark rounded w-24"></div>
-                      <div class="h-2 bg-scroll-dark/60 rounded w-full mt-2"></div>
-                    </div>
-                  </div>
+          <!-- 重大事件 -->
+          {events.length > 0 && (
+            <div class="mb-16">
+              <h2 class="section-heading">
+                {L.events}
+                <span class="section-heading-en">Key Events</span>
+              </h2>
+              <div class="relative pl-6 border-l border-gold/20">
+                {events.map((event, i) => (
+                  <button
+                    class="event-card w-full text-left mb-7 group cursor-pointer relative"
+                    data-index={i}
+                  >
+                    <div class="absolute -left-[29px] w-3 h-3 rounded-full border-2
+                                border-gold/40 bg-scroll group-hover:border-vermillion
+                                group-hover:bg-vermillion/20 transition-colors mt-1.5"></div>
+                    <!-- year: body font -->
+                    <p class="body-text-sm text-gold/70 tracking-widest mb-1">{event.year}</p>
+                    <!-- event name: body font, NOT heading font -->
+                    <p class="body-text font-semibold text-ink group-hover:text-vermillion
+                              transition-colors">
+                      {event.name}
+                    </p>
+                    {event.englishName && (
+                      <p class="body-text-sm text-ink-faint mt-0.5">{event.englishName}</p>
+                    )}
+                  </button>
                 ))}
               </div>
             </div>
-          </div>
+          )}
 
-          <div class="mb-14">
-            <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
-              {labels.culture}
-            </h3>
-            <div class="mt-4 grid grid-cols-3 gap-4">
-              {[1, 2, 3].map(() => (
-                <div class="aspect-[4/3] bg-scroll-dark rounded"></div>
+          <!-- 文化成就 -->
+          {achievements && (
+            <div class="mb-16">
+              <h2 class="section-heading">
+                {L.culture}
+                <span class="section-heading-en">Cultural Achievements</span>
+              </h2>
+
+              {[
+                { label: L.economy,    items: achievements.economy },
+                { label: L.politics,   items: achievements.politics },
+                { label: L.cultureSub, items: achievements.culture },
+              ].filter(s => s.items?.length).map(section => (
+                <details class="mb-4 group" open>
+                  <summary class="flex items-center gap-2 cursor-pointer list-none py-3
+                                  border-b border-gold/15 select-none">
+                    <span class="text-gold/60 text-xs transition-transform duration-200
+                                 group-open:rotate-90">▶</span>
+                    <!-- sub-section label: body font, medium weight -->
+                    <span class="body-text font-semibold text-ink">{section.label}</span>
+                  </summary>
+                  <div class="pt-4 space-y-6">
+                    {section.items!.map(item => (
+                      <div class="pl-4 border-l border-gold/15">
+                        <!-- achievement title: body font, NOT heading font -->
+                        <p class="body-text font-semibold text-ink mb-1">{item.title}</p>
+                        <p class="body-text text-ink-light leading-[1.85]">{item.description}</p>
+                        {(item.artifact || item.museum) && (
+                          <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                            {item.artifact && (
+                              <span class="body-text-sm text-ink-faint">
+                                <span class="text-gold/50">{L.artifact}：</span>{item.artifact}
+                              </span>
+                            )}
+                            {item.museum && (
+                              <span class="body-text-sm text-ink-faint">
+                                <span class="text-gold/50">{L.museum}：</span>{item.museum}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </details>
               ))}
             </div>
-          </div>
-        </div>
-      )}
+          )}
 
-      <nav class="flex items-center justify-between pt-10 border-t border-gold/15 mt-10">
-        {prev ? (
-          <a
-            href={`${import.meta.env.BASE_URL}${lang}/dynasty/${prev.slug}`}
-            class="flex items-center gap-3 text-ink-light hover:text-vermillion transition-colors group"
-          >
-            <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            <div class="text-right">
-              <p class="text-[10px] text-ink-faint tracking-wider uppercase">{labels.previous}</p>
-              <p class="font-heading text-base mt-0.5">{prev.name}</p>
+          <!-- Skeleton for dynasties without structured content -->
+          {figures.length === 0 && events.length === 0 && !achievements && (
+            <>
+              <div class="grid sm:grid-cols-2 gap-8 mb-14">
+                <div>
+                  <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">{L.figures}</h3>
+                  <div class="space-y-4 mt-4">
+                    {[1,2,3].map(() => (
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-scroll-dark"></div>
+                        <div class="flex-1">
+                          <div class="h-2.5 bg-scroll-dark rounded w-20"></div>
+                          <div class="h-2 bg-scroll-dark/60 rounded w-28 mt-2"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">{L.events}</h3>
+                  <div class="space-y-4 mt-4">
+                    {[1,2,3].map(() => (
+                      <div class="flex items-center gap-3">
+                        <div class="w-1.5 h-1.5 rounded-full bg-gold/30"></div>
+                        <div class="flex-1">
+                          <div class="h-2.5 bg-scroll-dark rounded w-24"></div>
+                          <div class="h-2 bg-scroll-dark/60 rounded w-full mt-2"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div class="mb-14">
+                <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">{L.culture}</h3>
+                <div class="mt-4 grid grid-cols-3 gap-4">
+                  {[1,2,3].map(() => <div class="aspect-[4/3] bg-scroll-dark rounded"></div>)}
+                </div>
+              </div>
+            </>
+          )}
+
+          <!-- 参考资料 / References — always last -->
+          {references && (
+            <div class="mb-16 pt-10 border-t border-gold/10">
+              <h2 class="text-xs font-body font-semibold tracking-[0.12em] uppercase
+                         text-ink-faint mb-5">
+                {isZh ? '参考资料' : 'References'}
+              </h2>
+              {references.primary && references.primary.length > 0 && (
+                <div class="mb-4">
+                  <p class="text-xs text-gold/50 tracking-widest uppercase mb-2">
+                    {isZh ? '原始文献' : 'Primary Sources'}
+                  </p>
+                  <ul class="space-y-1.5">
+                    {references.primary.map(r => (
+                      <li class="text-xs text-ink-faint leading-relaxed"
+                          set:html={r.replace(/\*(.*?)\*/g, '<em>$1</em>')} />
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {references.secondary && references.secondary.length > 0 && (
+                <div>
+                  <p class="text-xs text-gold/50 tracking-widest uppercase mb-2">
+                    {isZh ? '现代学术著作' : 'Secondary Scholarship'}
+                  </p>
+                  <ul class="space-y-1.5">
+                    {references.secondary.map(r => (
+                      <li class="text-xs text-ink-faint leading-relaxed"
+                          set:html={r.replace(/\*(.*?)\*/g, '<em>$1</em>')} />
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-          </a>
-        ) : <div />}
+          )}
 
-        <a
-          href={import.meta.env.BASE_URL}
-          class="text-ink-faint hover:text-vermillion transition-colors text-xs tracking-[0.2em] uppercase"
-        >
-          {labels.backToTimeline}
-        </a>
+          <!-- Prev / Next -->
+          <nav class="flex items-center justify-between pt-10 border-t border-gold/15 mt-10">
+            {prev ? (
+              <a href={`${import.meta.env.BASE_URL}${lang}/dynasty/${prev.slug}`}
+                 class="flex items-center gap-3 text-ink-light hover:text-vermillion transition-colors group">
+                <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <div class="text-right">
+                  <p class="text-xs text-ink-faint tracking-wider uppercase">{L.prev}</p>
+                  <p class="font-heading text-base mt-0.5">{prev.name}</p>
+                </div>
+              </a>
+            ) : <div />}
 
-        {next ? (
-          <a
-            href={`${import.meta.env.BASE_URL}${lang}/dynasty/${next.slug}`}
-            class="flex items-center gap-3 text-ink-light hover:text-vermillion transition-colors group"
-          >
-            <div>
-              <p class="text-[10px] text-ink-faint tracking-wider uppercase">{labels.next}</p>
-              <p class="font-heading text-base mt-0.5">{next.name}</p>
-            </div>
-            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        ) : <div />}
-      </nav>
-    </div>
+            <a href={import.meta.env.BASE_URL}
+               class="body-text-sm text-ink-faint hover:text-vermillion transition-colors tracking-[0.2em] uppercase">
+              {L.back}
+            </a>
+
+            {next ? (
+              <a href={`${import.meta.env.BASE_URL}${lang}/dynasty/${next.slug}`}
+                 class="flex items-center gap-3 text-ink-light hover:text-vermillion transition-colors group">
+                <div>
+                  <p class="text-xs text-ink-faint tracking-wider uppercase">{L.next}</p>
+                  <p class="font-heading text-base mt-0.5">{next.name}</p>
+                </div>
+                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            ) : <div />}
+          </nav>
+    </div><!-- /max-w-2xl -->
+
+    <!-- RIGHT: fixed detail panel (outside content flow, doesn't affect centering) -->
+    <aside
+      id="detail-panel"
+      class="fixed top-20 right-6 w-80 max-h-[80vh] overflow-y-auto z-40
+             rounded-lg bg-[#f2e8d5] border border-gold/10 shadow-xl
+             transition-all duration-300
+             opacity-0 pointer-events-none translate-x-4"
+      style="display:none"
+      aria-live="polite"
+    >
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gold/10">
+        <span id="panel-tag" class="text-xs text-gold/60 tracking-widest uppercase"></span>
+        <button id="panel-close"
+                class="text-ink-faint hover:text-vermillion transition-colors text-xs tracking-wider cursor-pointer">
+          ✕
+        </button>
+      </div>
+      <div id="panel-body" class="px-5 py-5"></div>
+    </aside>
+
   </section>
+
 </Layout>
+
+<style>
+  /* Section heading: font-heading, prominent */
+  .section-heading {
+    font-family: Georgia, "Noto Serif SC", serif;
+    font-size: 1.5rem;   /* text-2xl */
+    font-weight: 600;
+    color: #2c2418;
+    margin-bottom: 1.5rem;
+    border-left: 2px solid #a67c3d;
+    padding-left: 1rem;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .section-heading-en {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #8a7a68;
+    letter-spacing: 0.05em;
+  }
+
+  /* Body text: system font, never calligraphic */
+  .body-text {
+    font-family: system-ui, -apple-system, "Noto Serif SC", sans-serif;
+    font-size: 1rem;
+    color: #3a2f1e;
+    line-height: 1.85;
+  }
+  .body-text-sm {
+    font-family: system-ui, -apple-system, "Noto Serif SC", sans-serif;
+    font-size: 0.875rem;
+    color: #6a5a48;
+    line-height: 1.7;
+  }
+</style>
+
+<script define:vars={{ figuresJson, eventsJson, dynastyColor: dynasty.color }}>
+  const figures = JSON.parse(figuresJson);
+  const events  = JSON.parse(eventsJson);
+
+  const panel     = document.getElementById('detail-panel');
+  const panelBody = document.getElementById('panel-body');
+  const panelTag  = document.getElementById('panel-tag');
+  const closeBtn  = document.getElementById('panel-close');
+
+  function showPanel(tag, html) {
+    if (!panel || !panelBody || !panelTag) return;
+    panelTag.textContent = tag;
+    panelBody.innerHTML  = html;
+    panel.style.display = 'block';
+    panel.offsetHeight; // force reflow
+    panel.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-4');
+    panel.classList.add('opacity-100', 'pointer-events-auto', 'translate-x-0');
+  }
+
+  function hidePanel() {
+    if (!panel) return;
+    panel.classList.add('opacity-0', 'pointer-events-none', 'translate-x-4');
+    panel.classList.remove('opacity-100', 'pointer-events-auto', 'translate-x-0');
+    setTimeout(() => { panel.style.display = 'none'; }, 300);
+  }
+
+  closeBtn?.addEventListener('click', hidePanel);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hidePanel(); });
+
+  document.querySelectorAll('.figure-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const f = figures[parseInt(card.dataset.index)];
+      if (!f) return;
+      showPanel('人物 · Figure', `
+        <div class="w-14 h-14 rounded-full flex items-center justify-center mb-4
+                    font-serif text-2xl text-white font-bold"
+             style="background-color:${dynastyColor};">${f.name[0]}</div>
+        <p style="font-family:system-ui,sans-serif;font-size:1.1rem;font-weight:600;
+                  color:#2c2418;margin-bottom:0.25rem;">${f.name}</p>
+        ${f.englishName ? `<p style="font-size:0.8rem;color:#8a7a68;margin-bottom:0.25rem;">${f.englishName}</p>` : ''}
+        <p style="font-size:0.8rem;color:#6a5a48;margin-bottom:0.25rem;">${f.role}</p>
+        ${f.years ? `<p style="font-size:0.75rem;color:#a67c3d;margin-bottom:1rem;">${f.years}</p>` : '<div style="margin-bottom:1rem;"></div>'}
+        <div style="width:2rem;height:1px;background:#a67c3d;opacity:0.4;margin-bottom:1rem;"></div>
+        <p style="font-family:system-ui,sans-serif;font-size:0.875rem;color:#5a4a35;
+                  line-height:1.85;">${f.bio}</p>
+      `);
+    });
+  });
+
+  document.querySelectorAll('.event-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const ev = events[parseInt(card.dataset.index)];
+      if (!ev) return;
+      showPanel('事件 · Event', `
+        <p style="font-size:0.75rem;color:#a67c3d;letter-spacing:0.08em;
+                  margin-bottom:0.5rem;">${ev.year}</p>
+        <p style="font-family:system-ui,sans-serif;font-size:1.1rem;font-weight:600;
+                  color:#2c2418;margin-bottom:0.25rem;">${ev.name}</p>
+        ${ev.englishName ? `<p style="font-size:0.8rem;color:#8a7a68;margin-bottom:1rem;">${ev.englishName}</p>` : '<div style="margin-bottom:1rem;"></div>'}
+        <div style="width:2rem;height:1px;background:#a67c3d;opacity:0.4;margin-bottom:1rem;"></div>
+        <p style="font-family:system-ui,sans-serif;font-size:0.875rem;color:#5a4a35;
+                  line-height:1.85;">${ev.description}</p>
+      `);
+    });
+  });
+</script>
