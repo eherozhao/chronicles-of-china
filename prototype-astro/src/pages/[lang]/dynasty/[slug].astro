@@ -93,7 +93,8 @@ const eventsJson  = JSON.stringify(events);
       <div class="flex gap-12 items-start">
 
         <!-- LEFT: main content -->
-        <div class="flex-1 min-w-0 max-w-2xl">
+        <div class="flex-1 min-w-0">
+        <div class="max-w-2xl mx-auto">
 
           <!-- 简介 -->
           <div class="mb-16">
@@ -306,7 +307,8 @@ const eventsJson  = JSON.stringify(events);
               </a>
             ) : <div />}
           </nav>
-        </div>
+        </div><!-- /max-w-2xl mx-auto -->
+        </div><!-- /flex-1 -->
 
         <!-- RIGHT: sticky inline detail panel -->
         <aside
