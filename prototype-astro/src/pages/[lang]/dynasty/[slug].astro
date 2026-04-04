@@ -120,12 +120,12 @@ const eventsJson  = JSON.stringify(events);
 
       <!-- 重要人物 -->
       {figures.length > 0 && (
-        <div class="mb-16">
+        <div class="mb-16 figures-section-wrapper">
           <h2 class="section-heading">
             {L.figures}
             <span class="section-heading-en">Key Figures</span>
           </h2>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="figures-grid">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {figures.map((figure, i) => (
               <button
                 class="figure-card text-left p-4 rounded bg-scroll-dark/40 hover:bg-scroll-dark
@@ -137,7 +137,7 @@ const eventsJson  = JSON.stringify(events);
                      style={`background-color: ${dynasty.color}; opacity:0.85;`}>
                   {figure.name[0]}
                 </div>
-                <p class="figure-name body-text font-semibold text-ink group-hover:text-vermillion
+                <p class="body-text font-semibold text-ink group-hover:text-vermillion
                           transition-colors leading-snug">
                   {figure.name}
                 </p>
@@ -151,10 +151,20 @@ const eventsJson  = JSON.stringify(events);
               </button>
             ))}
           </div>
-          <!-- Inline detail panel for figures — inserted after grid, spans full width -->
-          <div id="figure-detail" class="inline-detail">
-            <div class="inline-detail-inner" id="figure-detail-inner"></div>
-          </div>
+          <!-- Detail sidebar anchored to this section -->
+          <aside id="detail-sidebar"
+                 class="detail-sidebar"
+                 style="display:none"
+                 aria-live="polite">
+            <div class="flex items-center justify-between px-5 py-3 border-b border-gold/10">
+              <span id="sidebar-tag" class="text-xs text-gold/60 tracking-widest uppercase"></span>
+              <button id="sidebar-close"
+                      class="text-ink-faint hover:text-vermillion transition-colors p-1 cursor-pointer text-sm leading-none">
+                ✕
+              </button>
+            </div>
+            <div id="sidebar-body" class="px-5 py-5"></div>
+          </aside>
         </div>
       )}
 
@@ -348,10 +358,62 @@ const eventsJson  = JSON.stringify(events);
     </div><!-- /max-w-2xl -->
   </section>
 
+  <!-- Mobile bottom sheet (< 1280px) -->
+  <div id="panel-backdrop"
+       class="fixed inset-0 z-30 bg-black/40 transition-opacity duration-300 opacity-0 pointer-events-none"
+       style="display:none"></div>
+
+  <aside id="detail-panel"
+         class="fixed z-40 bg-[#f2e8d5] shadow-2xl overflow-y-auto
+                transition-all duration-300 panel-hidden"
+         style="display:none"
+         aria-live="polite">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-gold/10">
+      <span id="panel-tag" class="text-xs text-gold/60 tracking-widest uppercase"></span>
+      <button id="panel-close"
+              class="text-ink-faint hover:text-vermillion transition-colors p-2 cursor-pointer text-base leading-none">
+        ✕
+      </button>
+    </div>
+    <div id="panel-body" class="px-5 py-5 pb-8"></div>
+  </aside>
+
 </Layout>
 
 <style>
-  /* Inline expand panel below cards */
+  /* Figures section: relative container for the sidebar */
+  .figures-section-wrapper {
+    position: relative;
+  }
+
+  /* Desktop detail sidebar — absolute within figures section, in the right gutter */
+  .detail-sidebar {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 1.5rem;
+    width: 18rem;
+    max-height: 100%;
+    overflow-y: auto;
+    z-index: 20;
+    background: #f2e8d5;
+    border: 1px solid rgba(166, 124, 61, 0.12);
+    border-radius: 0.75rem;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  /* Mobile bottom sheet */
+  #detail-panel {
+    left: 0; right: 0; bottom: 0;
+    max-height: 72vh;
+    border-radius: 1.25rem 1.25rem 0 0;
+    border: 1px solid rgba(166,124,61,0.15);
+    border-bottom: none;
+  }
+  #detail-panel.panel-hidden  { transform: translateY(100%); opacity: 0; pointer-events: none; }
+  #detail-panel.panel-visible { transform: translateY(0);    opacity: 1; pointer-events: auto; }
+
+  /* Inline expand for events */
   .inline-detail {
     overflow: hidden;
     max-height: 0;
@@ -411,70 +473,133 @@ const eventsJson  = JSON.stringify(events);
   const figures = JSON.parse(figuresJson);
   const events  = JSON.parse(eventsJson);
 
-  const figureDetail = document.getElementById('figure-detail');
-  const figureDetailInner = document.getElementById('figure-detail-inner');
-  let activeFigureIdx = -1;
+  // Desktop sidebar (wide screens only)
+  const sidebar     = document.getElementById('detail-sidebar');
+  const sidebarTag  = document.getElementById('sidebar-tag');
+  const sidebarBody = document.getElementById('sidebar-body');
+  const sidebarClose = document.getElementById('sidebar-close');
 
-  function figureHTML(f) {
-    return `
-      <p style="font-size:1.05rem;font-weight:600;color:#2c2418;margin-bottom:0.15rem;">${f.name}</p>
-      ${f.englishName ? `<p style="font-size:0.8rem;color:#8a7a68;margin-bottom:0.15rem;">${f.englishName}</p>` : ''}
-      <p style="font-size:0.8rem;color:#6a5a48;">${f.role}${f.years ? ` · ${f.years}` : ''}</p>
-      <div style="width:2rem;height:1px;background:#a67c3d;opacity:0.3;margin:0.75rem 0;"></div>
-      <p style="font-size:0.875rem;color:#5a4a35;line-height:1.85;">${f.bio}</p>
-    `;
+  // Mobile bottom-sheet
+  const panel     = document.getElementById('detail-panel');
+  const backdrop  = document.getElementById('panel-backdrop');
+  const panelTag  = document.getElementById('panel-tag');
+  const panelBody = document.getElementById('panel-body');
+  const panelClose = document.getElementById('panel-close');
+
+  // Wide enough for sidebar to fit in the right gutter?
+  const usesSidebar = () => window.innerWidth >= 1280;
+
+  function detailHTML(type, data) {
+    if (type === 'figure') {
+      const f = data;
+      return `
+        <div style="width:3.5rem;height:3.5rem;border-radius:50%;display:flex;
+                    align-items:center;justify-content:center;margin-bottom:1rem;
+                    font-family:Georgia,serif;font-size:1.5rem;color:#fff;font-weight:700;
+                    background-color:${dynastyColor};">${f.name[0]}</div>
+        <p style="font-family:system-ui,sans-serif;font-size:1.05rem;font-weight:600;
+                  color:#2c2418;margin-bottom:0.2rem;">${f.name}</p>
+        ${f.englishName ? `<p style="font-size:0.8rem;color:#8a7a68;margin-bottom:0.2rem;">${f.englishName}</p>` : ''}
+        <p style="font-size:0.8rem;color:#6a5a48;margin-bottom:0.2rem;">${f.role}</p>
+        ${f.years ? `<p style="font-size:0.75rem;color:#a67c3d;margin-bottom:1rem;">${f.years}</p>` : '<div style="margin-bottom:1rem;"></div>'}
+        <div style="width:2rem;height:1px;background:#a67c3d;opacity:0.4;margin-bottom:1rem;"></div>
+        <p style="font-family:system-ui,sans-serif;font-size:0.875rem;color:#5a4a35;line-height:1.85;">${f.bio}</p>
+      `;
+    } else {
+      const ev = data;
+      return `
+        <p style="font-size:0.75rem;color:#a67c3d;letter-spacing:0.08em;margin-bottom:0.5rem;">${ev.year}</p>
+        <p style="font-family:system-ui,sans-serif;font-size:1.05rem;font-weight:600;
+                  color:#2c2418;margin-bottom:0.2rem;">${ev.name}</p>
+        ${ev.englishName ? `<p style="font-size:0.8rem;color:#8a7a68;margin-bottom:1rem;">${ev.englishName}</p>` : '<div style="margin-bottom:1rem;"></div>'}
+        <div style="width:2rem;height:1px;background:#a67c3d;opacity:0.4;margin-bottom:1rem;"></div>
+        <p style="font-family:system-ui,sans-serif;font-size:0.875rem;color:#5a4a35;line-height:1.85;">${ev.description}</p>
+      `;
+    }
   }
+
+  function showPanel(tag, html) {
+    if (!panel || !panelTag || !panelBody) return;
+    panelTag.textContent = tag;
+    panelBody.innerHTML  = html;
+    panel.style.display = 'block';
+    if (backdrop) backdrop.style.display = 'block';
+    panel.offsetHeight;
+    panel.classList.remove('panel-hidden');
+    panel.classList.add('panel-visible');
+    if (backdrop) {
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop.classList.add('opacity-100', 'pointer-events-auto');
+    }
+  }
+
+  function showDetail(tag, html) {
+    if (usesSidebar()) {
+      if (!sidebar || !sidebarTag || !sidebarBody) return;
+      sidebarTag.textContent = tag;
+      sidebarBody.innerHTML  = html;
+      sidebar.style.display = 'block';
+    } else {
+      showPanel(tag, html);
+    }
+  }
+
+  function hideSidebar() {
+    if (sidebar) sidebar.style.display = 'none';
+  }
+
+  function hidePanel() {
+    if (!panel) return;
+    panel.classList.remove('panel-visible');
+    panel.classList.add('panel-hidden');
+    if (backdrop) {
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+    }
+    setTimeout(() => {
+      panel.style.display = 'none';
+      if (backdrop) backdrop.style.display = 'none';
+    }, 300);
+  }
+
+  sidebarClose?.addEventListener('click', hideSidebar);
+  panelClose?.addEventListener('click', hidePanel);
+  backdrop?.addEventListener('click', hidePanel);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { hideSidebar(); hidePanel(); }
+  });
 
   document.querySelectorAll('.figure-card').forEach(card => {
     card.addEventListener('click', () => {
-      const idx = parseInt(card.dataset.index);
-      const f = figures[idx];
-      if (!f || !figureDetail || !figureDetailInner) return;
-
-      // Toggle off if same card clicked
-      if (activeFigureIdx === idx) {
-        figureDetail.classList.remove('open');
-        // Remove active highlight
-        document.querySelectorAll('.figure-card .figure-name').forEach(n => n.style.color = '');
-        activeFigureIdx = -1;
-        return;
-      }
-
-      figureDetailInner.innerHTML = figureHTML(f);
-      figureDetail.classList.add('open');
-      activeFigureIdx = idx;
-
-      // Highlight active card name
-      document.querySelectorAll('.figure-card .figure-name').forEach(n => n.style.color = '');
-      card.querySelector('.figure-name').style.color = '#bf3b2c';
+      const f = figures[parseInt(card.dataset.index)];
+      if (!f) return;
+      showDetail('人物 · Figure', detailHTML('figure', f));
     });
   });
 
-  // Events — each has its own inline detail
   document.querySelectorAll('.event-card').forEach(card => {
     card.addEventListener('click', () => {
-      const idx = parseInt(card.dataset.index);
-      const ev = events[idx];
+      const ev = events[parseInt(card.dataset.index)];
       if (!ev) return;
 
+      if (!usesSidebar()) {
+        showPanel('事件 · Event', detailHTML('event', ev));
+        return;
+      }
+
+      // Desktop: inline expand below the event
       const wrapper = card.closest('.event-wrapper');
       const detail = wrapper.querySelector('.event-detail');
       const inner = detail.querySelector('.inline-detail-inner');
 
-      // If already open, close it
       if (detail.classList.contains('open')) {
         detail.classList.remove('open');
-        card.querySelector('.event-name').style.color = '';
         return;
       }
 
-      // Close any other open event detail
       document.querySelectorAll('.event-detail.open').forEach(d => d.classList.remove('open'));
-      document.querySelectorAll('.event-card .event-name').forEach(n => n.style.color = '');
-
       inner.innerHTML = `<p style="font-size:0.875rem;color:#5a4a35;line-height:1.85;">${ev.description}</p>`;
       detail.classList.add('open');
-      card.querySelector('.event-name').style.color = '#bf3b2c';
     });
   });
 </script>

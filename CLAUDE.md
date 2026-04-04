@@ -15,15 +15,23 @@ chronicles-of-china/
 ├── .github/workflows/deploy.yml   # CI/CD: GitHub Pages deployment
 ├── prototype-astro/               # Main application (all dev happens here)
 │   ├── src/
-│   │   ├── data/dynasties.ts     # Core data: 22 dynasty entries
+│   │   ├── content/
+│   │   │   ├── config.ts         # Content Collections schema (figures, events, achievements, references)
+│   │   │   └── dynasty/
+│   │   │       ├── zh/           # Chinese content Markdown (beisong.md, tang.md, qin.md, …)
+│   │   │       └── en/           # English content Markdown
+│   │   ├── data/dynasties.ts     # Core data: 22 dynasty entries (slug, name, color, artwork…)
 │   │   ├── layouts/Layout.astro  # Base HTML layout (meta, fonts, global styles)
 │   │   ├── pages/
 │   │   │   ├── index.astro       # Homepage: horizontal scroll timeline
-│   │   │   └── dynasty/[slug].astro  # Dynamic detail pages
+│   │   │   ├── dynasty/[slug].astro  # Legacy redirect (unused)
+│   │   │   └── [lang]/dynasty/[slug].astro  # Bilingual dynasty detail pages
 │   │   └── styles/global.css     # Design system + scroll UX styles
+│   ├── public/images/            # Static assets (hero artwork images)
 │   ├── astro.config.mjs          # Site URL, base path, integrations
 │   ├── tailwind.config.mjs       # Custom color palette and font families
 │   └── tsconfig.json             # TypeScript config (strict, path alias @/*)
+├── CLAUDE.md
 ├── README.md
 └── SPEC.md                        # Full product specification
 ```
@@ -93,8 +101,21 @@ interface Dynasty {
   years: [number, number];   // Numeric range, negative = BCE (e.g. [-2070, -1600])
   description: string;       // 80–120 word overview
   color: string;             // Hex accent color (e.g. "#8B2252")
+  artwork?: string;          // Hero background image path relative to public/ (e.g. "images/qianli-jiangshan.jpg")
+  artworkPosition?: string;  // CSS object-position for artwork (e.g. "center 40%")
 }
 ```
+
+### Content Collections (per-dynasty structured data)
+
+Rich content lives in `src/content/dynasty/{lang}/{slug}.md` as Markdown with YAML frontmatter. Schema defined in `src/content/config.ts`:
+
+- `figures[]` — name, englishName, role, years, bio
+- `events[]` — year, name, englishName, description
+- `achievements` — economy[], politics[], culture[] (each with title, description, artifact, museum)
+- `references` — primary[], secondary[]
+
+The Markdown body is rendered as the "Overview" prose section. Dynasties without a content file fall back to the `description` from `dynasties.ts`.
 
 The array in `dynasties.ts` is the single source of truth — all pages are generated from it. When adding or modifying dynasties, update only this file.
 
@@ -149,6 +170,25 @@ Follow "惜墨如金" (less ink, more meaning):
 
 ---
 
+## Dynasty Detail Page — Interaction Patterns (locked)
+
+The dynasty detail page (`[lang]/dynasty/[slug].astro`) has specific interaction behaviors for figures and events. These were user-approved and should not be changed without explicit direction.
+
+### Key Figures — Click to show detail
+- **Desktop (≥1280px)**: Clicking a figure card shows a detail sidebar in the right gutter, positioned `absolute` within the figures section (not `fixed` to viewport). The sidebar scrolls with the page and only appears alongside the Key Figures area. Clicking the close button or pressing Escape hides it.
+- **Mobile (<1280px)**: Clicking a figure card shows a bottom sheet popup with backdrop overlay.
+
+### Key Events — Click to expand inline
+- **Desktop**: Clicking an event expands its description directly below the event item in the timeline. Only one event can be expanded at a time. Clicking again collapses it.
+- **Mobile (<1280px)**: Clicking an event shows a bottom sheet popup.
+
+### Important constraints
+- The figures detail sidebar must NOT use `position: fixed` — it must be anchored to the figures section so it scrolls with the page
+- The main content column (`max-w-2xl`) must not resize or shift when the sidebar appears
+- Events must NOT use the sidebar — they always use inline expand on desktop
+
+---
+
 ## Dynasty Detail Page — Typography Scale (locked)
 
 These sizes were user-approved on the 北宋 page and apply to all dynasty detail pages:
@@ -187,12 +227,15 @@ These rules were user-approved on the 北宋 page. Apply them to all dynasty det
 
 ## Routing
 
-| URL Pattern            | File                              |
-|------------------------|-----------------------------------|
-| `/chronicles-of-china/`       | `src/pages/index.astro`           |
-| `/chronicles-of-china/dynasty/:slug` | `src/pages/dynasty/[slug].astro` |
+| URL Pattern                              | File                                      |
+|------------------------------------------|-------------------------------------------|
+| `/chronicles-of-china/`                  | `src/pages/index.astro`                   |
+| `/chronicles-of-china/zh/dynasty/:slug`  | `src/pages/[lang]/dynasty/[slug].astro`   |
+| `/chronicles-of-china/en/dynasty/:slug`  | `src/pages/[lang]/dynasty/[slug].astro`   |
 
-Slugs come from the `slug` field in `dynasties.ts`. Valid slugs: `shanggu`, `xia`, `shang`, `zhou`, `chunqiu`, `zhanguo`, `qin`, `han`, `sanguo`, `jin`, `nanbeichao`, `sui`, `tang`, `wudai`, `beisong`, `nansong`, `yuan`, `ming`, `qing`, `minguo`, `prc`.
+Bilingual routing is implemented. Each dynasty page has `/zh/` and `/en/` variants with a language toggle in the hero. Slugs come from the `slug` field in `dynasties.ts`.
+
+Valid slugs: `shanggu`, `xia`, `shang`, `xizhou`, `dongzhou`, `qin`, `xihan`, `donghan`, `sanguo`, `xijin`, `dongjin`, `nanbeichao`, `sui`, `tang`, `wudai`, `beisong`, `nansong`, `yuan`, `ming`, `qing`, `minguo`, `gongheguo`.
 
 ---
 
@@ -201,8 +244,10 @@ Slugs come from the `slug` field in `dynasties.ts`. Valid slugs: `shanggu`, `xia
 1. Add an entry to the `dynasties` array in `src/data/dynasties.ts` (maintain chronological order by `years[0]`)
 2. Choose a unique `slug` in kebab-case
 3. Pick an accent `color` that distinguishes it visually
-4. Run `npm run build` to verify `getStaticPaths()` generates the page correctly
-5. No other files need changes — pages and navigation are generated automatically
+4. Optionally add `artwork` and `artworkPosition` for a hero background image (place image in `public/images/`, keep file size under 200KB)
+5. Create content files in `src/content/dynasty/zh/{slug}.md` and `src/content/dynasty/en/{slug}.md` with YAML frontmatter matching the schema in `config.ts`
+6. Run `npm run build` to verify `getStaticPaths()` generates the page correctly
+7. No other files need changes — pages and navigation are generated automatically
 
 ---
 
@@ -210,17 +255,19 @@ Slugs come from the `slug` field in `dynasties.ts`. Valid slugs: `shanggu`, `xia
 
 ### Completed
 - Horizontal-scroll homepage with drag, wheel, touch, and keyboard support
+- Bilingual routing (`/zh/`, `/en/` prefixes) with language toggle
+- Content Collections (Markdown pipeline for rich per-dynasty content)
 - Dynasty detail pages with prev/next navigation
+- Structured sections: Overview, Key Figures, Key Events, Cultural Achievements, References
+- Hero artwork backgrounds (with compressed images in `public/images/`)
 - Scroll-triggered reveal animations (Intersection Observer)
 - Progress bar and active-era indicator on homepage
 - GitHub Pages CI/CD pipeline
 - Custom design system (Tailwind config + global CSS)
 
 ### Not Yet Implemented (see SPEC.md)
-- Content Collections (Markdown pipeline for rich per-dynasty content)
-- Bilingual routing (`/zh/`, `/en/` prefixes)
-- Images, maps, and multimedia
-- Placeholder content sections (currently show skeleton state)
+- Content for most dynasties (only beisong, tang, qin have content files)
+- Maps and multimedia
 - Search or filtering
 
 ---
