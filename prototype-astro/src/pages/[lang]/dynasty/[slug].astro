@@ -32,20 +32,36 @@ const otherLangLabel = lang === 'zh' ? 'English' : '中文';
 const rendered = entry ? await entry.render() : null;
 const Content = rendered?.Content;
 
+const figures = entry?.data.figures ?? [];
+const events = entry?.data.events ?? [];
+const achievements = entry?.data.achievements ?? null;
+
 const isZh = lang === 'zh';
 const labels = {
   overview: isZh ? '简介' : 'Overview',
   figures: isZh ? '重要人物' : 'Key Figures',
   events: isZh ? '重大事件' : 'Key Events',
-  culture: isZh ? '文化成就' : 'Culture',
+  culture: isZh ? '文化成就' : 'Cultural Achievements',
+  economy: isZh ? '经济' : 'Economy',
+  politics: isZh ? '政治' : 'Politics',
+  cultureSub: isZh ? '文化' : 'Culture',
+  artifact: isZh ? '文物' : 'Artifact',
+  museum: isZh ? '馆藏' : 'Collection',
   backToTimeline: isZh ? '回到卷轴' : 'Back to Timeline',
   previous: isZh ? '上一朝' : 'Previous',
   next: isZh ? '下一朝' : 'Next',
   comingSoon: isZh ? '内容正在整理中，敬请期待。' : 'Content coming soon.',
+  close: isZh ? '关闭' : 'Close',
+  years: isZh ? '年份' : 'Years',
 };
+
+// Serialize structured data for client-side JS
+const figuresJson = JSON.stringify(figures);
+const eventsJson = JSON.stringify(events);
 ---
 
 <Layout title={`${dynasty.name} ${dynasty.englishName} | 华夏春秋`} lang={lang}>
+  <!-- ===== HERO ===== -->
   <section class="bg-night relative">
     <div
       class="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -68,7 +84,6 @@ const labels = {
         {dynasty.period}
       </p>
 
-      <!-- Language toggle -->
       <div class="mt-8 flex items-center justify-center gap-3">
         <span class="text-scroll/60 text-lg tracking-widest">
           {lang === 'zh' ? '中文' : 'English'}
@@ -84,42 +99,145 @@ const labels = {
     </div>
   </section>
 
+  <!-- ===== CONTENT ===== -->
   <section class="scroll-surface">
     <div class="max-w-2xl mx-auto px-6 py-16 sm:py-20">
 
-      <!-- Overview -->
-      <div class="mb-14">
+      <!-- 简介 / Overview -->
+      <div class="mb-16">
         <h2 class="font-heading text-xl text-ink mb-5 gold-left-accent">
           {labels.overview}
-          {!isZh && <span class="text-xs text-ink-faint font-body ml-3">Overview</span>}
-          {isZh && <span class="text-xs text-ink-faint font-body ml-3">Overview</span>}
+          <span class="text-xs text-ink-faint font-body ml-3">Overview</span>
         </h2>
-
         {Content ? (
           <div class="prose-dynasty">
             <Content />
           </div>
         ) : (
           <>
-            <p class="font-body text-ink-light leading-[1.9] text-base">
-              {dynasty.description}
-            </p>
+            <p class="font-body text-ink-light leading-[1.9] text-base">{dynasty.description}</p>
             <p class="mt-6 text-xs text-ink-faint italic">{labels.comingSoon}</p>
           </>
         )}
       </div>
 
-      {!Content && (
+      <!-- 重要人物 / Key Figures -->
+      {figures.length > 0 && (
+        <div class="mb-16">
+          <h2 class="font-heading text-xl text-ink mb-6 gold-left-accent">
+            {labels.figures}
+            <span class="text-xs text-ink-faint font-body ml-3">Key Figures</span>
+          </h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {figures.map((figure, i) => (
+              <button
+                class="figure-card text-left p-4 rounded bg-scroll-dark/40 hover:bg-scroll-dark transition-colors duration-200 group cursor-pointer"
+                data-index={i}
+                aria-label={`${figure.name} 详情`}
+              >
+                <div
+                  class="w-12 h-12 rounded-full flex items-center justify-center mb-3 font-heading text-xl text-scroll"
+                  style={`background-color: ${dynasty.color}; opacity: 0.85;`}
+                >
+                  {figure.name[0]}
+                </div>
+                <p class="font-heading text-base text-ink group-hover:text-vermillion transition-colors leading-snug">
+                  {figure.name}
+                </p>
+                {figure.englishName && (
+                  <p class="text-xs text-ink-faint mt-0.5">{figure.englishName}</p>
+                )}
+                <p class="text-xs text-ink-faint mt-1">{figure.role}</p>
+                {figure.years && (
+                  <p class="text-xs text-gold/60 mt-1">{figure.years}</p>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- 重大事件 / Key Events -->
+      {events.length > 0 && (
+        <div class="mb-16">
+          <h2 class="font-heading text-xl text-ink mb-6 gold-left-accent">
+            {labels.events}
+            <span class="text-xs text-ink-faint font-body ml-3">Key Events</span>
+          </h2>
+          <div class="relative pl-6 border-l border-gold/20">
+            {events.map((event, i) => (
+              <button
+                class="event-card w-full text-left mb-6 group cursor-pointer"
+                data-index={i}
+                aria-label={`${event.name} 详情`}
+              >
+                <div class="absolute -left-[5px] w-2.5 h-2.5 rounded-full border-2 border-gold/40 bg-scroll group-hover:border-vermillion group-hover:bg-vermillion/20 transition-colors mt-1"></div>
+                <p class="text-xs text-gold/70 tracking-widest mb-1">{event.year}</p>
+                <p class="font-heading text-base text-ink group-hover:text-vermillion transition-colors">
+                  {event.name}
+                </p>
+                {event.englishName && (
+                  <p class="text-xs text-ink-faint mt-0.5">{event.englishName}</p>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- 文化成就 / Cultural Achievements -->
+      {achievements && (
+        <div class="mb-16">
+          <h2 class="font-heading text-xl text-ink mb-6 gold-left-accent">
+            {labels.culture}
+            <span class="text-xs text-ink-faint font-body ml-3">Cultural Achievements</span>
+          </h2>
+
+          {[
+            { key: 'economy', label: labels.economy, items: achievements.economy },
+            { key: 'politics', label: labels.politics, items: achievements.politics },
+            { key: 'culture', label: labels.cultureSub, items: achievements.culture },
+          ].filter(s => s.items && s.items.length > 0).map(section => (
+            <details class="achievement-section mb-4 group" open>
+              <summary class="flex items-center gap-2 cursor-pointer list-none py-3 border-b border-gold/15 select-none">
+                <span class="text-gold/60 text-xs transition-transform duration-200 group-open:rotate-90">▶</span>
+                <span class="font-heading text-base text-ink">{section.label}</span>
+              </summary>
+              <div class="pt-4 space-y-6">
+                {section.items!.map(item => (
+                  <div class="pl-4 border-l border-gold/15">
+                    <p class="font-heading text-sm text-ink mb-1">{item.title}</p>
+                    <p class="font-body text-sm text-ink-light leading-[1.85]">{item.description}</p>
+                    {(item.artifact || item.museum) && (
+                      <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                        {item.artifact && (
+                          <span class="text-xs text-ink-faint">
+                            <span class="text-gold/50">{labels.artifact}：</span>{item.artifact}
+                          </span>
+                        )}
+                        {item.museum && (
+                          <span class="text-xs text-ink-faint">
+                            <span class="text-gold/50">{labels.museum}：</span>{item.museum}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </details>
+          ))}
+        </div>
+      )}
+
+      <!-- Skeleton placeholder when no structured content -->
+      {figures.length === 0 && events.length === 0 && !achievements && (
         <>
-          <!-- Figures skeleton -->
           <div class="grid sm:grid-cols-2 gap-8 mb-14">
             <div>
-              <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
-                {labels.figures}
-                <span class="text-xs text-ink-faint font-body ml-2">Figures</span>
-              </h3>
+              <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">{labels.figures}</h3>
               <div class="mt-4 space-y-4">
-                {[1, 2, 3].map(() => (
+                {[1,2,3].map(() => (
                   <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-scroll-dark"></div>
                     <div class="flex-1">
@@ -130,14 +248,10 @@ const labels = {
                 ))}
               </div>
             </div>
-
             <div>
-              <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
-                {labels.events}
-                <span class="text-xs text-ink-faint font-body ml-2">Events</span>
-              </h3>
+              <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">{labels.events}</h3>
               <div class="mt-4 space-y-4">
-                {[1, 2, 3].map(() => (
+                {[1,2,3].map(() => (
                   <div class="flex items-center gap-3">
                     <div class="w-1.5 h-1.5 rounded-full bg-gold/30"></div>
                     <div class="flex-1">
@@ -149,15 +263,10 @@ const labels = {
               </div>
             </div>
           </div>
-
-          <!-- Culture skeleton -->
           <div class="mb-14">
-            <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
-              {labels.culture}
-              <span class="text-xs text-ink-faint font-body ml-2">Culture</span>
-            </h3>
+            <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">{labels.culture}</h3>
             <div class="mt-4 grid grid-cols-3 gap-4">
-              {[1, 2, 3].map(() => (
+              {[1,2,3].map(() => (
                 <div class="aspect-[4/3] bg-scroll-dark rounded"></div>
               ))}
             </div>
@@ -206,4 +315,102 @@ const labels = {
       </nav>
     </div>
   </section>
+
+  <!-- ===== RIGHT-SIDE DETAIL PANEL ===== -->
+  <div
+    id="detail-panel"
+    class="fixed top-0 right-0 h-full w-full sm:w-96 bg-scroll shadow-2xl z-50 overflow-y-auto
+           transform translate-x-full transition-transform duration-300 ease-in-out"
+    aria-hidden="true"
+  >
+    <div class="flex items-center justify-between px-6 py-5 border-b border-gold/15 sticky top-0 bg-scroll z-10">
+      <span id="panel-tag" class="text-[10px] text-gold/60 tracking-widest uppercase"></span>
+      <button
+        id="panel-close"
+        class="text-ink-faint hover:text-vermillion transition-colors text-sm tracking-wider"
+        aria-label={labels.close}
+      >
+        ✕
+      </button>
+    </div>
+    <div id="panel-body" class="px-6 py-6"></div>
+  </div>
+
+  <!-- Backdrop -->
+  <div
+    id="panel-backdrop"
+    class="fixed inset-0 bg-night/40 z-40 opacity-0 pointer-events-none transition-opacity duration-300"
+  ></div>
 </Layout>
+
+<script define:vars={{ figuresJson, eventsJson, dynastyColor: dynasty.color }}>
+  const figures = JSON.parse(figuresJson);
+  const events = JSON.parse(eventsJson);
+
+  const panel = document.getElementById('detail-panel');
+  const panelBody = document.getElementById('panel-body');
+  const panelTag = document.getElementById('panel-tag');
+  const panelClose = document.getElementById('panel-close');
+  const backdrop = document.getElementById('panel-backdrop');
+
+  function openPanel(tag, html) {
+    panelTag.textContent = tag;
+    panelBody.innerHTML = html;
+    panel.classList.remove('translate-x-full');
+    panel.setAttribute('aria-hidden', 'false');
+    backdrop.classList.remove('opacity-0', 'pointer-events-none');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel() {
+    panel.classList.add('translate-x-full');
+    panel.setAttribute('aria-hidden', 'true');
+    backdrop.classList.add('opacity-0', 'pointer-events-none');
+    document.body.style.overflow = '';
+  }
+
+  panelClose?.addEventListener('click', closePanel);
+  backdrop?.addEventListener('click', closePanel);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePanel(); });
+
+  // Figure cards
+  document.querySelectorAll('.figure-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const i = parseInt(card.dataset.index);
+      const f = figures[i];
+      if (!f) return;
+
+      const html = `
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 font-heading text-2xl text-scroll"
+             style="background-color: ${dynastyColor}; opacity: 0.85;">
+          ${f.name[0]}
+        </div>
+        <h3 class="font-heading text-2xl text-ink mb-1">${f.name}</h3>
+        ${f.englishName ? `<p class="text-sm text-ink-faint mb-1">${f.englishName}</p>` : ''}
+        <p class="text-sm text-ink-faint mb-1">${f.role}</p>
+        ${f.years ? `<p class="text-xs text-gold/60 mb-5">${f.years}</p>` : '<div class="mb-5"></div>'}
+        <div class="w-8 h-px bg-gold/30 mb-5"></div>
+        <p class="font-body text-sm text-ink-light leading-[1.9]">${f.bio}</p>
+      `;
+      openPanel('人物 · Figure', html);
+    });
+  });
+
+  // Event cards
+  document.querySelectorAll('.event-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const i = parseInt(card.dataset.index);
+      const ev = events[i];
+      if (!ev) return;
+
+      const html = `
+        <p class="text-xs text-gold/70 tracking-widest mb-3">${ev.year}</p>
+        <h3 class="font-heading text-2xl text-ink mb-1">${ev.name}</h3>
+        ${ev.englishName ? `<p class="text-sm text-ink-faint mb-5">${ev.englishName}</p>` : '<div class="mb-5"></div>'}
+        <div class="w-8 h-px bg-gold/30 mb-5"></div>
+        <p class="font-body text-sm text-ink-light leading-[1.9]">${ev.description}</p>
+      `;
+      openPanel('事件 · Event', html);
+    });
+  });
+</script>
