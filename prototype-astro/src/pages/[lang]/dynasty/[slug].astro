@@ -88,14 +88,16 @@ const eventsJson  = JSON.stringify(events);
     </div>
   </section>
 
-  <!-- ── CONTENT: two-column layout ── -->
+  <!-- ── CONTENT ── -->
   <section class="scroll-surface">
-    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-20">
-      <div class="flex gap-12 items-start">
+    <!--
+      Grid: [left-gutter] [content: max 42rem] [right-panel: max 22rem] [right-gutter]
+      Content column stays centred regardless of panel visibility.
+    -->
+    <div class="content-grid py-16 sm:py-20">
 
-        <!-- LEFT: main content -->
-        <div class="flex-1 min-w-0">
-        <div class="max-w-2xl mx-auto">
+        <!-- main content — centred column -->
+        <div class="content-col px-6">
 
           <!-- 简介 -->
           <div class="mb-16">
@@ -344,17 +346,16 @@ const eventsJson  = JSON.stringify(events);
               </a>
             ) : <div />}
           </nav>
-        </div><!-- /max-w-2xl mx-auto -->
-        </div><!-- /flex-1 -->
+        </div><!-- /content-col -->
 
-        <!-- RIGHT: sticky inline detail panel -->
+        <!-- RIGHT: sticky panel in right-gutter column -->
         <aside
           id="detail-panel"
-          class="w-80 flex-shrink-0 sticky top-8 hidden lg:block opacity-0
-                 transition-opacity duration-300 self-start"
+          class="panel-col hidden lg:block opacity-0 sticky top-8 self-start
+                 transition-opacity duration-300"
           aria-live="polite"
         >
-          <div class="rounded-lg bg-scroll-dark/30 border border-gold/10 overflow-hidden">
+          <div class="rounded-lg bg-scroll-dark/30 border border-gold/10 overflow-hidden mx-4">
             <div class="flex items-center justify-between px-5 py-4 border-b border-gold/10">
               <span id="panel-tag" class="text-xs text-gold/60 tracking-widest uppercase"></span>
               <button id="panel-close"
@@ -366,13 +367,40 @@ const eventsJson  = JSON.stringify(events);
           </div>
         </aside>
 
-      </div><!-- /flex -->
-    </div>
+    </div><!-- /content-grid -->
   </section>
 
 </Layout>
 
 <style>
+  /*
+   * Content grid: keeps the main column centred at all times.
+   * [auto] [min(42rem,100%)] [min(22rem,1fr)] [auto]
+   * The content column is always the width of the hero (42rem / max-w-2xl).
+   * The panel column sits in the right gutter — when hidden it takes no visual space
+   * but the grid columns are symmetric so content stays centred.
+   */
+  .content-grid {
+    display: grid;
+    grid-template-columns:
+      1fr
+      min(42rem, 100%)
+      min(22rem, 1fr)
+      1fr;
+    grid-template-rows: auto;
+    align-items: start;
+  }
+  .content-col  { grid-column: 2; }
+  .panel-col    { grid-column: 3; padding-top: 0; }
+
+  @media (max-width: 1023px) {
+    /* On smaller screens collapse to single centred column */
+    .content-grid {
+      grid-template-columns: 1fr min(42rem, 100%) 1fr;
+    }
+    .panel-col { display: none !important; }
+  }
+
   /* Section heading: font-heading, prominent */
   .section-heading {
     font-family: Georgia, "Noto Serif SC", serif;
