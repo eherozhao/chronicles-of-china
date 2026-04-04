@@ -12,7 +12,21 @@ import { dynasties } from '../data/dynasties';
     <div class="flex items-center justify-between px-6 h-11">
       <span class="font-heading text-sm tracking-widest text-scroll/80">华夏春秋</span>
       <div class="flex items-center gap-4">
-        <span id="current-era" class="text-[10px] text-gold-light/60 tracking-widest uppercase transition-opacity duration-500"></span>
+        <span id="current-era" class="text-[10px] text-gold-light/60 tracking-widest uppercase transition-opacity duration-500 cursor-pointer hover:text-gold-light/90 relative select-none flex items-center gap-1">
+          <span id="current-era-text"></span>
+          <svg class="w-2.5 h-2.5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </span>
+        <!-- Dynasty dropdown -->
+        <div id="era-dropdown" class="era-dropdown" style="display:none">
+          {dynasties.map((d) => (
+            <button class="era-dropdown-item" data-slug={d.slug} data-era={d.englishName}>
+              <span class="era-dot" style={`background:${d.color};`}></span>
+              <span class="era-name-zh">{d.name}</span>
+              <span class="era-name-en">{d.englishName}</span>
+              <span class="era-period">{d.period}</span>
+            </button>
+          ))}
+        </div>
         <span class="text-[10px] text-scroll/70 tracking-[0.3em] uppercase hidden sm:inline">Scroll to explore</span>
       </div>
     </div>
@@ -114,6 +128,67 @@ import { dynasties } from '../data/dynasties';
   </div>
 </Layout>
 
+<style>
+  .era-dropdown {
+    position: fixed;
+    top: 2.75rem;
+    right: 1.5rem;
+    width: 18rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(166, 124, 61, 0.15);
+    border-radius: 0.5rem;
+    padding: 0.35rem 0;
+    z-index: 60;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(166,124,61,0.2) transparent;
+  }
+  .era-dropdown-item {
+    display: grid;
+    grid-template-columns: 6px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 0 0.5rem;
+    align-items: center;
+    width: 100%;
+    padding: 0.45rem 0.75rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+    background: none;
+    color: inherit;
+  }
+  .era-dropdown-item:hover, .era-dropdown-item.active {
+    background: rgba(166, 124, 61, 0.12);
+  }
+  .era-dot {
+    grid-row: 1 / 3;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    opacity: 0.7;
+  }
+  .era-name-zh {
+    font-size: 0.8rem;
+    color: #f2e8d5;
+    letter-spacing: 0.05em;
+  }
+  .era-name-en {
+    font-size: 0.6rem;
+    color: rgba(166, 124, 61, 0.5);
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+  .era-period {
+    grid-column: 2;
+    font-size: 0.6rem;
+    color: rgba(242, 232, 213, 0.3);
+    letter-spacing: 0.03em;
+  }
+</style>
+
 <script>
   const container = document.getElementById('scroll-container');
   const progressBar = document.getElementById('progress-bar');
@@ -208,13 +283,18 @@ import { dynasties } from '../data/dynasties';
 
       if (closestSection && currentEra) {
         const era = (closestSection as HTMLElement).dataset.era || '';
-        if (currentEra.textContent !== era) {
+        const eraText = document.getElementById('current-era-text');
+        if (eraText && eraText.textContent !== era) {
           currentEra.style.opacity = '0';
           setTimeout(() => {
-            currentEra.textContent = era;
+            eraText.textContent = era;
             currentEra.style.opacity = '1';
           }, 200);
         }
+        // Highlight active item in dropdown
+        document.querySelectorAll('.era-dropdown-item').forEach(item => {
+          item.classList.toggle('active', (item as HTMLElement).dataset.era === era);
+        });
       }
     });
 
@@ -240,6 +320,51 @@ import { dynasties } from '../data/dynasties';
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') container.scrollLeft += 300;
       if (e.key === 'ArrowLeft') container.scrollLeft -= 300;
+      if (e.key === 'Escape') closeDropdown();
+    });
+
+    // Era dropdown
+    const dropdown = document.getElementById('era-dropdown');
+    let dropdownOpen = false;
+
+    function openDropdown() {
+      if (!dropdown) return;
+      dropdown.style.display = 'block';
+      dropdownOpen = true;
+      // Scroll active item into view
+      const active = dropdown.querySelector('.active');
+      if (active) active.scrollIntoView({ block: 'center' });
+    }
+
+    function closeDropdown() {
+      if (!dropdown) return;
+      dropdown.style.display = 'none';
+      dropdownOpen = false;
+    }
+
+    currentEra?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownOpen ? closeDropdown() : openDropdown();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (dropdownOpen && dropdown && !dropdown.contains(e.target as Node)) {
+        closeDropdown();
+      }
+    });
+
+    document.querySelectorAll('.era-dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const era = (item as HTMLElement).dataset.era;
+        const section = document.querySelector(`.dynasty-section[data-era="${era}"]`);
+        if (section && container) {
+          const sectionRect = section.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const offset = sectionRect.left - containerRect.left + container.scrollLeft - containerRect.width / 2 + sectionRect.width / 2;
+          container.scrollTo({ left: offset, behavior: 'smooth' });
+        }
+        closeDropdown();
+      });
     });
   }
 </script>
