@@ -38,3 +38,16 @@ color: "#1A1A1A"
 ## 速亡与遗产
 
 秦朝虽仅历二世，存续不足十五年，却奠定了此后两千余年中国政治制度的基本框架。郡县制、皇帝制度、中央集权的官僚体系——这些秦朝首创的制度，经汉朝继承发扬后，历经各朝代损益，延续至20世纪初。汉高祖刘邦虽灭秦，却在制度上继承了秦的遗产，正如历史学家所言："汉承秦制。"
+
+## 参考资料
+
+**原始文献**
+- 司马迁《史记·秦始皇本纪》，约前109–前91年
+- 司马迁《史记·李斯列传》
+- 班固《汉书·贾谊传》（含《过秦论》引文）
+
+**现代学术著作**
+- Bodde, Derk. "The State and Empire of Ch'in." *The Cambridge History of China*, Vol. 1. Cambridge University Press, 1986.
+- Lewis, Mark Edward. *The Early Chinese Empires: Qin and Han*. Harvard University Press, 2007.
+- Kern, Martin. *The Stele Inscriptions of Ch'in Shih-huang*. American Oriental Society, 2000.
+- 翦伯赞主编《中国史纲要》第一册，人民出版社，1983年。

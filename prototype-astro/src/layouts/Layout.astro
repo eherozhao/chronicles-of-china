@@ -12,7 +12,7 @@ const htmlLang = lang === 'en' ? 'en' : 'zh-CN';
 ---
 
 <!doctype html>
-<html lang={htmlLang}
+<html lang={htmlLang} class={fullscreen ? 'overflow-hidden' : ''}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,7 +23,7 @@ const htmlLang = lang === 'en' ? 'en' : 'zh-CN';
     <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
-  <body class={fullscreen ? 'overflow-hidden' : ''}>
+  <body>
     {!fullscreen && (
       <header class="bg-night-light/80 backdrop-blur-md sticky top-0 z-50 border-b border-gold/10">
         <div class="max-w-6xl mx-auto px-6">

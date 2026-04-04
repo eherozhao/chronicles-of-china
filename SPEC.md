@@ -130,13 +130,76 @@ sources:
 ---
 ```
 
-### Content Per Dynasty
-1. **Overview**: 2-3 paragraphs establishing the era
-2. **Key Figures**: 3-5 major historical figures with brief bios
-3. **Major Events**: Chronological list of defining events
-4. **Cultural Achievements**: Art, literature, technology, philosophy
-5. **Legacy**: How this period shaped subsequent history
-6. **Sources**: Full bibliography with primary source references
+### Dynasty Detail Page — Section Structure
+
+Each dynasty detail page follows this fixed structure (in order):
+
+---
+
+#### 1. Hero (dark background)
+- **Large calligraphic Chinese name** — `font-display`, very large (currently `text-7xl sm:text-9xl`)
+- **English name** — `text-xl`, subdued opacity
+- **Period dates** — `text-xl`, gold tint
+- **Language toggle** — `text-sm`, inline: `中文 | English` (active lang shown, other is a link)
+
+---
+
+#### 2. 简介 / Overview
+A 2–4 paragraph narrative overview of the dynasty: founding context, defining character, and historical significance. Written in flowing prose, not bullet points.
+
+---
+
+#### 3. 重要人物 / Key Figures
+- Displayed as a **grid of figure cards** (image + name + title/role)
+- Each card is **clickable** — clicking expands a **detail panel on the right side** of the page (slide-in drawer or sticky side panel)
+- The panel contains: portrait image (public domain), full biographical note, key achievements, dates
+- The panel is **collapsible/dismissible** — clicking again or pressing Escape closes it
+- Only one figure panel open at a time
+- **Image sources**: Wikimedia Commons, National Palace Museum Open Data (CC0 / public domain only)
+- If no image is available, show a tasteful placeholder with the figure's name in calligraphic style
+
+---
+
+#### 4. 重大事件 / Key Events
+- Displayed as a **vertical timeline** with date markers
+- Each event is **clickable** — same right-panel expansion pattern as Key Figures
+- Panel contains: date, event name (zh + en), narrative description, significance, related figures
+- Events sorted chronologically
+
+---
+
+#### 5. 文化成就 / Cultural Achievements
+Divided into **three sub-sections**, each collapsible:
+
+- **经济 Economy** — trade routes, currency systems, agricultural innovations, GDP/prosperity indicators
+- **政治 Politics** — governance reforms, institutions created, administrative innovations
+- **文化 Culture** — literature, art, philosophy, religion, science & technology
+
+Each sub-section features **major artifacts / works**:
+- Artifact image (public domain, with attribution)
+- Name in Chinese and English
+- Current museum / collection holding the artifact
+- 1–2 sentence description of its historical significance
+
+---
+
+#### 6. 参考资料 / References
+Split into two tiers:
+- **Primary sources** (原始文献): original Chinese historical texts with author, title, and date of compilation
+- **Secondary scholarship** (现代学术著作): peer-reviewed monographs and Cambridge History of China volumes
+
+References render in a smaller, muted style to distinguish from main narrative.
+
+---
+
+### Content Per Dynasty (Markdown file structure)
+Each `content/zh/` and `content/en/` Markdown file contains these H2 sections in order:
+1. 建立与统一 / Rise and Unification
+2. [Era-specific section — e.g. 盛唐气象, 经济繁荣, 制度建设]
+3. 重要人物 / Key Figures (bullet list for now; will migrate to structured data)
+4. [Era-specific section]
+5. [Era-specific section]
+6. 参考资料 / References (primary sources, then secondary scholarship)
 
 ---
 
@@ -158,7 +221,7 @@ sources:
 | 12 | 南北朝 | Northern & Southern | 420 - 589 CE |
 | 13 | 隋 | Sui Dynasty | 581 - 618 CE |
 | 14 | 唐 | Tang Dynasty | 618 - 907 CE |
-| 15 | 五代十国 | Five Dynasties | 907 - 979 CE |
+| 15 | 五代十国 | Five Dynasties and Ten Kingdoms | 907 - 979 CE |
 | 16 | 北宋 | Northern Song | 960 - 1127 CE |
 | 17 | 南宋 | Southern Song | 1127 - 1279 CE |
 | 18 | 元 | Yuan Dynasty | 1271 - 1368 CE |
@@ -181,12 +244,15 @@ sources:
 - [ ] Scroll-triggered animations on timeline
 - [ ] Responsive mobile design polish
 
-### M2: Content Pipeline
-- [ ] Set up Astro Content Collections for Markdown
-- [ ] Create Markdown frontmatter schema
-- [ ] Directory structure: `content/zh/` and `content/en/`
-- [ ] Markdown rendering with typography styles (prose)
-- [ ] Bilingual route switching (`/zh/dynasty/xxx` ↔ `/en/dynasty/xxx`)
+### M2: Content Pipeline ✅
+- [x] Set up Astro Content Collections for Markdown (`src/content/config.ts`)
+- [x] Create Markdown frontmatter schema (`dynastySlug`, `lang`, `title`, `englishName`, `period`, `overview`, `color`)
+- [x] Directory structure: `src/content/dynasty/zh/` and `src/content/dynasty/en/`
+- [x] Markdown rendering inside structured dynasty detail page layout
+- [x] Bilingual route switching (`/zh/dynasty/:slug` ↔ `/en/dynasty/:slug`)
+- [x] Old `/dynasty/:slug` URLs 301-redirect to `/zh/dynasty/:slug`
+- [x] Language toggle in dynasty hero section
+- [x] Initial content: 秦, 唐, 北宋 in both languages with primary source citations
 
 ### M3: First Content — Five Dynasties and Ten Kingdoms (五代十国)
 - [ ] Research and write Chinese content based on primary sources
@@ -196,16 +262,18 @@ sources:
 - [ ] Translate to English
 - [ ] Add source citations
 
-### M4: Content Expansion (2-3 more dynasties)
-- [ ] Tang Dynasty (唐) — golden age context leading into Five Dynasties
-- [ ] Northern Song (北宋) — what came after
-- [ ] One ancient dynasty (e.g., 秦 or 汉) for range diversity
+### M4: Content Expansion ✅
+- [x] Tang Dynasty (唐) — zh + en with citations
+- [x] Northern Song (北宋) — zh + en with citations
+- [x] Qin Dynasty (秦) — zh + en with citations (ancient era)
 
-### M5: Rich Media & Interactivity
-- [ ] Dynasty territory maps (open-source/public domain)
-- [ ] Figure portrait illustrations (copyright-free sources)
-- [ ] Interactive map component (Astro Island)
-- [ ] Search functionality
+### M5: Rich Detail Pages & Interactivity
+- [ ] **重要人物**: figure grid with right-side expandable panel (slide-in drawer, one open at a time, Escape to close)
+- [ ] **重大事件**: vertical timeline with same expandable panel pattern
+- [ ] **文化成就**: three collapsible sub-sections (经济 / 政治 / 文化), each with artifact cards (image + museum attribution)
+- [ ] Public-domain portrait images for key figures (Wikimedia Commons / National Palace Museum Open Data)
+- [ ] Dynasty territory maps (open-source/public domain SVG)
+- [ ] Search functionality across dynasty content
 - [ ] Reading progress indicator
 
 ### M6: Polish & Scale

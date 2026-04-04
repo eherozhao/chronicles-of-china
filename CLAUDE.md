@@ -149,6 +149,26 @@ Follow "惜墨如金" (less ink, more meaning):
 
 ---
 
+## Dynasty Detail Page — Typography Scale (locked)
+
+These sizes were user-approved on the 北宋 page and apply to all dynasty detail pages:
+
+| Element | Tailwind class | Notes |
+|---------|---------------|-------|
+| Chinese dynasty name (h1) | `text-7xl sm:text-9xl` | `font-heading`, calligraphic weight |
+| English name | `text-xl` | `font-body`, subdued opacity (`text-scroll/50`) |
+| Period dates | `text-3xl` | `font-heading`, gold tint (`text-gold-light/70`) |
+| Language toggle (active) | `text-lg` | muted (`text-scroll/60`) |
+| Language toggle (link) | `text-lg` | gold hover (`text-gold/60 hover:text-gold`) |
+| Section headings (h2) | `text-xl` | `font-heading`, gold left-accent border |
+| Sub-section headings (h3) | `text-lg` | `font-heading` |
+| Body / prose text | `text-base` | `font-body`, `leading-[1.9]` |
+| Reference section | `text-sm` | muted (`text-ink-faint`) |
+
+Do not change these sizes without explicit user approval.
+
+---
+
 ## Routing
 
 | URL Pattern            | File                              |
@@ -186,6 +206,24 @@ Slugs come from the `slug` field in `dynasties.ts`. Valid slugs: `shanggu`, `xia
 - Images, maps, and multimedia
 - Placeholder content sections (currently show skeleton state)
 - Search or filtering
+
+---
+
+## Git Workflow
+
+### When to push directly to `main`
+Push directly (no PR) for any change that does **not** touch content Markdown files:
+- CSS / styling (`global.css`, `tailwind.config.mjs`)
+- Astro templates / layouts (`.astro` files)
+- TypeScript / JavaScript logic
+- Configuration files (`astro.config.mjs`, `deploy.yml`, etc.)
+- Data file (`src/data/dynasties.ts`)
+- Docs (`CLAUDE.md`, `README.md`, `SPEC.md`)
+
+Pushing to `main` automatically triggers the GitHub Actions build and deploys to GitHub Pages.
+
+### When to open a PR for review
+Open a PR **only** when the change includes new or edited **content Markdown** files (future `content/zh/` or `content/en/` directories). These need human review for historical accuracy and translation quality before going live.
 
 ---
 
