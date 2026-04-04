@@ -41,7 +41,7 @@ const labels = {
   backToTimeline: isZh ? '回到卷轴' : 'Back to Timeline',
   previous: isZh ? '上一朝' : 'Previous',
   next: isZh ? '下一朝' : 'Next',
-  noContent: isZh ? '内容正在整理中，敬请期待。' : 'Content coming soon.',
+  comingSoon: isZh ? '内容正在整理中，敬请期待。' : 'Content coming soon.',
 };
 ---
 
@@ -87,30 +87,36 @@ const labels = {
   <section class="scroll-surface">
     <div class="max-w-2xl mx-auto px-6 py-16 sm:py-20">
 
-      {Content ? (
-        <!-- Rendered Markdown content -->
-        <div class="prose-dynasty">
-          <Content />
-        </div>
-      ) : (
-        <!-- Skeleton / placeholder when no Markdown file exists yet -->
-        <div>
-          <div class="mb-14">
-            <h2 class="font-heading text-xl text-ink mb-5 gold-left-accent">
-              {labels.overview}
-            </h2>
+      <!-- Overview -->
+      <div class="mb-14">
+        <h2 class="font-heading text-xl text-ink mb-5 gold-left-accent">
+          {labels.overview}
+          {!isZh && <span class="text-xs text-ink-faint font-body ml-3">Overview</span>}
+          {isZh && <span class="text-xs text-ink-faint font-body ml-3">Overview</span>}
+        </h2>
+
+        {Content ? (
+          <div class="prose-dynasty">
+            <Content />
+          </div>
+        ) : (
+          <>
             <p class="font-body text-ink-light leading-[1.9] text-base">
               {dynasty.description}
             </p>
-            {!entry && (
-              <p class="mt-6 text-xs text-ink-faint italic">{labels.noContent}</p>
-            )}
-          </div>
+            <p class="mt-6 text-xs text-ink-faint italic">{labels.comingSoon}</p>
+          </>
+        )}
+      </div>
 
+      {!Content && (
+        <>
+          <!-- Figures skeleton -->
           <div class="grid sm:grid-cols-2 gap-8 mb-14">
             <div>
               <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
                 {labels.figures}
+                <span class="text-xs text-ink-faint font-body ml-2">Figures</span>
               </h3>
               <div class="mt-4 space-y-4">
                 {[1, 2, 3].map(() => (
@@ -128,6 +134,7 @@ const labels = {
             <div>
               <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
                 {labels.events}
+                <span class="text-xs text-ink-faint font-body ml-2">Events</span>
               </h3>
               <div class="mt-4 space-y-4">
                 {[1, 2, 3].map(() => (
@@ -143,9 +150,11 @@ const labels = {
             </div>
           </div>
 
+          <!-- Culture skeleton -->
           <div class="mb-14">
             <h3 class="font-heading text-lg text-ink mb-4 gold-left-accent">
               {labels.culture}
+              <span class="text-xs text-ink-faint font-body ml-2">Culture</span>
             </h3>
             <div class="mt-4 grid grid-cols-3 gap-4">
               {[1, 2, 3].map(() => (
@@ -153,9 +162,10 @@ const labels = {
               ))}
             </div>
           </div>
-        </div>
+        </>
       )}
 
+      <!-- Prev / Next navigation -->
       <nav class="flex items-center justify-between pt-10 border-t border-gold/15 mt-10">
         {prev ? (
           <a
