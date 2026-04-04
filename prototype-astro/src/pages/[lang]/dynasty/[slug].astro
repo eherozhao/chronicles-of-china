@@ -385,19 +385,30 @@ const eventsJson  = JSON.stringify(events);
   #detail-panel.panel-visible { transform: translateY(0);    opacity: 1; pointer-events: auto; }
 
   @media (min-width: 768px) {
-    /* Desktop: right-side fixed drawer */
+    /* Desktop default: right-side fixed drawer */
     #detail-panel {
       left: auto;
       right: 1.5rem;
       bottom: auto;
       top: 5rem;
-      width: 20rem;
+      width: 18rem;
       max-height: 80vh;
       border-radius: 0.75rem;
       border: 1px solid rgba(166,124,61,0.15);
     }
     #detail-panel.panel-hidden  { transform: translateX(1rem); opacity: 0; pointer-events: none; }
     #detail-panel.panel-visible { transform: translateX(0);    opacity: 1; pointer-events: auto; }
+  }
+
+  @media (min-width: 1400px) {
+    /* Wide screen: panel sits in the right gutter, adjacent to content column.
+       Content column is max-w-2xl (42rem) centred, so its right edge is at calc(50% + 21rem).
+       Panel starts 1.5rem beyond that. */
+    #detail-panel {
+      left: calc(50% + 21rem + 1.5rem);
+      right: auto;
+      width: 20rem;
+    }
   }
 
   /* Section heading: font-heading, prominent */
