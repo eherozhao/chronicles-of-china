@@ -767,8 +767,10 @@ const artifactsJson = JSON.stringify(allArtifacts);
     if (lightbox) lightbox.style.display = 'none';
   }
 
-  document.querySelectorAll('[data-artifact-index]').forEach(card => {
-    card.addEventListener('click', () => openLightbox(parseInt((card as HTMLElement).dataset.artifactIndex!)));
+  document.querySelectorAll('[data-artifact-index]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      openLightbox(parseInt(card.getAttribute('data-artifact-index')));
+    });
   });
 
   lbClose?.addEventListener('click', closeLightbox);
