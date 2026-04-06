@@ -84,7 +84,7 @@ const artifactsJson = JSON.stringify(allArtifacts);
 
     {/* Fade hero into content section — clean transition, no glow/shadow */}
     <div class="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-         style="background: linear-gradient(to bottom, rgba(242,232,213,0), #f2e8d5);"></div>
+         style="background: linear-gradient(to bottom, transparent, #f2e8d5);"></div>
 
     <div class="relative z-10 max-w-2xl mx-auto px-6 py-20 sm:py-28 text-center">
       <div class="w-8 h-px mx-auto mb-8" style={`background-color: ${dynasty.color}; opacity: 0.5;`}></div>
@@ -109,15 +109,9 @@ const artifactsJson = JSON.stringify(allArtifacts);
     </div>
   </section>
 
-  <!-- ── CONTENT ── -->
+  <!-- ── CONTENT — single centred column, sidebar lives outside this flow ── -->
   <section class="scroll-surface relative">
-    <!--
-      Mobile:   single centred column  (max-w-2xl mx-auto)
-      xl+:      two-column grid, centred as a whole
-                left = 42rem (same reading width), right = 18rem detail col
-    -->
-    <div class="content-layout px-6 py-16 sm:py-20">
-      <div class="content-main">
+    <div class="max-w-2xl mx-auto px-6 py-16 sm:py-20">
 
       <!-- 简介 -->
       <div class="mb-16">
@@ -403,9 +397,7 @@ const artifactsJson = JSON.stringify(allArtifacts);
         ) : <div />}
       </nav>
 
-      </div><!-- /content-main -->
-    </div><!-- /content-layout -->
-
+    </div><!-- /max-w-2xl -->
   </section>
 
   <!-- Mobile bottom sheet (< 1280px) -->
@@ -447,12 +439,6 @@ const artifactsJson = JSON.stringify(allArtifacts);
 </Layout>
 
 <style>
-  /* Content layout: centred single column */
-  .content-layout {
-    max-width: 42rem;
-    margin-inline: auto;
-  }
-
   /* Figures section: relative container for the sidebar */
   .figures-section-wrapper {
     position: relative;
@@ -628,8 +614,8 @@ const artifactsJson = JSON.stringify(allArtifacts);
   const figures = JSON.parse(figuresJson);
   const events  = JSON.parse(eventsJson);
 
-  // Desktop inline detail card
-  const detailCard  = document.getElementById('detail-card');
+  // Desktop sidebar (wide screens only)
+  const sidebar     = document.getElementById('detail-sidebar');
   const sidebarTag  = document.getElementById('sidebar-tag');
   const sidebarBody = document.getElementById('sidebar-body');
   const sidebarClose = document.getElementById('sidebar-close');
@@ -641,7 +627,7 @@ const artifactsJson = JSON.stringify(allArtifacts);
   const panelBody = document.getElementById('panel-body');
   const panelClose = document.getElementById('panel-close');
 
-  // xl breakpoint — matches the CSS grid breakpoint
+  // Wide enough for sidebar to fit in the right gutter?
   const usesSidebar = () => window.innerWidth >= 1280;
 
   function detailHTML(type, data) {
@@ -690,17 +676,17 @@ const artifactsJson = JSON.stringify(allArtifacts);
 
   function showDetail(tag, html) {
     if (usesSidebar()) {
-      if (!detailCard || !sidebarTag || !sidebarBody) return;
+      if (!sidebar || !sidebarTag || !sidebarBody) return;
       sidebarTag.textContent = tag;
       sidebarBody.innerHTML  = html;
-      detailCard.style.display = 'block';
+      sidebar.style.display = 'block';
     } else {
       showPanel(tag, html);
     }
   }
 
   function hideSidebar() {
-    if (detailCard) detailCard.style.display = 'none';
+    if (sidebar) sidebar.style.display = 'none';
   }
 
   function hidePanel() {
