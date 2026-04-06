@@ -65,6 +65,8 @@ const allArtifacts = achievements
       .filter((item): item is NonNullable<typeof item> => !!item?.artifact)
       .map(item => ({ title: item.title, artifact: item.artifact!, museum: item.museum, image: item.image }))
   : [];
+
+const artifactsJson = JSON.stringify(allArtifacts);
 ---
 
 <Layout title={`${dynasty.name} ${dynasty.englishName} | 华夏春秋`} lang={lang}>
@@ -264,8 +266,10 @@ const allArtifacts = achievements
                 <span class="text-xs font-normal text-ink-faint tracking-wider">Featured Artifacts</span>
               </h3>
               <div class="grid grid-cols-2 gap-4">
-                {allArtifacts.map(a => (
-                  <div class="artifact-card rounded overflow-hidden border border-gold/12 bg-scroll-dark/30">
+                {allArtifacts.map((a, i) => (
+                  <button class="artifact-card rounded overflow-hidden border border-gold/12 bg-scroll-dark/30
+                                 cursor-pointer text-left hover:border-gold/25 transition-colors"
+                          data-artifact-index={i}>
                     <div class="artifact-placeholder">
                       <span class="artifact-placeholder-text">{a.artifact}</span>
                     </div>
@@ -279,7 +283,7 @@ const allArtifacts = achievements
                         </p>
                       )}
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -416,6 +420,22 @@ const allArtifacts = achievements
     <div id="panel-body" class="px-5 py-5 pb-8"></div>
   </aside>
 
+  <!-- Artifact lightbox -->
+  <div id="artifact-lightbox" class="artifact-lightbox" style="display:none">
+    <div class="artifact-lightbox-backdrop"></div>
+    <div class="artifact-lightbox-content">
+      <button id="lightbox-close" class="artifact-lightbox-close">✕</button>
+      <div class="artifact-lightbox-image">
+        <span id="lightbox-placeholder-text" class="artifact-lightbox-placeholder-text"></span>
+      </div>
+      <div class="artifact-lightbox-info">
+        <p id="lightbox-name" class="font-semibold text-ink text-lg"></p>
+        <p id="lightbox-title" class="text-ink-faint text-sm mt-1"></p>
+        <p id="lightbox-museum" class="text-gold/70 text-sm mt-2"></p>
+      </div>
+    </div>
+  </div>
+
 </Layout>
 
 <style>
@@ -488,6 +508,72 @@ const allArtifacts = achievements
     line-height: 1.5;
   }
 
+  /* Artifact lightbox */
+  .artifact-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .artifact-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+  }
+  .artifact-lightbox-content {
+    position: relative;
+    max-width: 36rem;
+    width: 90vw;
+    background: #f2e8d5;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    animation: lightboxIn 0.25s ease;
+  }
+  .artifact-lightbox-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 10;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: rgba(242, 232, 213, 0.9);
+    border: 1px solid rgba(166, 124, 61, 0.15);
+    color: #6a5a48;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+  }
+  .artifact-lightbox-close:hover { color: #bf3b2c; }
+  .artifact-lightbox-image {
+    aspect-ratio: 3 / 2;
+    background: linear-gradient(135deg, #e6d5b8 0%, #d9c9a8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .artifact-lightbox-placeholder-text {
+    font-family: Georgia, "Noto Serif SC", serif;
+    font-size: 1.25rem;
+    color: rgba(166, 124, 61, 0.35);
+    text-align: center;
+    line-height: 1.6;
+  }
+  .artifact-lightbox-info {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+  @keyframes lightboxIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
   /* Section headings */
   .section-heading {
     font-family: Georgia, "Noto Serif SC", serif;
@@ -524,7 +610,7 @@ const allArtifacts = achievements
   }
 </style>
 
-<script define:vars={{ figuresJson, eventsJson, dynastyColor: dynasty.color }}>
+<script define:vars={{ figuresJson, eventsJson, artifactsJson, dynastyColor: dynasty.color }}>
   const figures = JSON.parse(figuresJson);
   const events  = JSON.parse(eventsJson);
 
@@ -657,4 +743,35 @@ const allArtifacts = achievements
       detail.classList.add('open');
     });
   });
+  // Artifact lightbox
+  const artifacts = JSON.parse(artifactsJson);
+  const lightbox = document.getElementById('artifact-lightbox');
+  const lbClose = document.getElementById('lightbox-close');
+  const lbBackdrop = lightbox?.querySelector('.artifact-lightbox-backdrop');
+  const lbName = document.getElementById('lightbox-name');
+  const lbTitle = document.getElementById('lightbox-title');
+  const lbMuseum = document.getElementById('lightbox-museum');
+  const lbPlaceholder = document.getElementById('lightbox-placeholder-text');
+
+  function openLightbox(idx) {
+    const a = artifacts[idx];
+    if (!a || !lightbox) return;
+    if (lbPlaceholder) lbPlaceholder.textContent = a.artifact;
+    if (lbName) lbName.textContent = a.artifact;
+    if (lbTitle) lbTitle.textContent = a.title;
+    if (lbMuseum) lbMuseum.textContent = a.museum ? '📍 ' + a.museum : '';
+    lightbox.style.display = 'flex';
+  }
+
+  function closeLightbox() {
+    if (lightbox) lightbox.style.display = 'none';
+  }
+
+  document.querySelectorAll('[data-artifact-index]').forEach(card => {
+    card.addEventListener('click', () => openLightbox(parseInt((card as HTMLElement).dataset.artifactIndex!)));
+  });
+
+  lbClose?.addEventListener('click', closeLightbox);
+  lbBackdrop?.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 </script>
