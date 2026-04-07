@@ -112,22 +112,56 @@ content/
 ```
 
 ### Markdown Frontmatter Schema
+
+The implemented schema (see `src/content/config.ts`):
+
 ```yaml
 ---
-title: "五代十国"
-englishTitle: "Five Dynasties and Ten Kingdoms"
-period: "907 - 979 CE"
-startYear: 907
-endYear: 979
-order: 15
-color: "#8B4513"        # Accent color for this dynasty
-heroImage: "/images/dynasties/wudai-hero.jpg"  # Optional
-tags: ["division", "military", "transition"]
-sources:
-  - "《旧五代史》(Old History of the Five Dynasties) - 薛居正"
-  - "《新五代史》(New History of the Five Dynasties) - 欧阳修"
-  - "《资治通鉴》(Comprehensive Mirror in Aid of Governance) - 司马光"
+dynastySlug: wudai           # matches slug in dynasties.ts
+lang: zh                     # zh or en
+title: 五代十国
+englishName: Five Dynasties and Ten Kingdoms
+period: "907–979"            # en-dash, not hyphen; always quote if starts with digit
+overview: "..."              # one-line tagline
+color: "#696969"             # optional, match dynasties.ts
+
+figures:
+  - name: 柴荣
+    englishName: Chai Rong (Emperor Shizong of Later Zhou)
+    role: 后周世宗
+    years: "921–959"
+    bio: "..."
+    image: images/figures/chai-rong.jpg   # optional
+
+events:
+  - year: "960"              # always quoted string; can use 约/c. prefix
+    name: 陈桥兵变
+    englishName: Coup at Chenqiao
+    description: "..."
+
+achievements:
+  economy:
+    - title: "..."
+      description: "..."
+      artifact: "..."        # optional — triggers artifact gallery card
+      museum: "..."          # optional
+  politics:
+    - title: "..."
+      description: "..."
+  culture:
+    - title: "..."
+      description: "..."
+      artifact: "..."
+      museum: "..."
+
+references:
+  primary:
+    - "脱脱等《宋史》，元至正三年至五年（1343–1345年）成书"
+  secondary:
+    - "Twitchett, Denis. *The Cambridge History of China*, Vol. 5. CUP, 2009."
 ---
+
+Prose overview body (2–3 paragraphs, rendered as 简介 / Overview section).
 ```
 
 ### Dynasty Detail Page — Section Structure
@@ -137,10 +171,11 @@ Each dynasty detail page follows this fixed structure (in order):
 ---
 
 #### 1. Hero (dark background)
-- **Large calligraphic Chinese name** — `font-display`, very large (currently `text-7xl sm:text-9xl`)
-- **English name** — `text-xl`, subdued opacity
-- **Period dates** — `text-xl`, gold tint
-- **Language toggle** — `text-sm`, inline: `中文 | English` (active lang shown, other is a link)
+- **Large calligraphic Chinese name** — `font-heading`, `text-7xl sm:text-9xl`
+- **English name** — `text-xl`, subdued opacity (`text-scroll/50`)
+- **Period dates** — `text-3xl`, gold tint (`text-gold-light/70`)
+- **Language toggle** — `text-lg`, inline: `中文 | English` (active shown muted, other is a gold link)
+- **Hero artwork** — optional `<img>` background (opacity 0.38, `filter: saturate(0.7)`) for dynasties with `artwork` set in `dynasties.ts`
 
 ---
 
@@ -150,36 +185,36 @@ A 2–4 paragraph narrative overview of the dynasty: founding context, defining 
 ---
 
 #### 3. 重要人物 / Key Figures
-- Displayed as a **grid of figure cards** (image + name + title/role)
-- Each card is **clickable** — clicking expands a **detail panel on the right side** of the page (slide-in drawer or sticky side panel)
-- The panel contains: portrait image (public domain), full biographical note, key achievements, dates
-- The panel is **collapsible/dismissible** — clicking again or pressing Escape closes it
+- Displayed as a **grid of figure cards** (avatar circle with first character + name + role)
+- Each card is **clickable**:
+  - **Desktop (≥1280px)**: detail sidebar appears to the right of the figures section, `position: absolute` anchored within the section (scrolls with page). Escape or ✕ to close.
+  - **Mobile**: bottom sheet popup with backdrop overlay
 - Only one figure panel open at a time
-- **Image sources**: Wikimedia Commons, National Palace Museum Open Data (CC0 / public domain only)
-- If no image is available, show a tasteful placeholder with the figure's name in calligraphic style
+- Avatar circle uses the dynasty's accent `color` as background
+- Portrait images not yet implemented — tracked in M5
 
 ---
 
 #### 4. 重大事件 / Key Events
 - Displayed as a **vertical timeline** with date markers
-- Each event is **clickable** — same right-panel expansion pattern as Key Figures
-- Panel contains: date, event name (zh + en), narrative description, significance, related figures
-- Events sorted chronologically
+- Each event is **clickable**:
+  - **Desktop**: description expands inline below the event item (one at a time, click again to collapse)
+  - **Mobile**: bottom sheet popup
+- Events sorted chronologically (from `events[]` in the content file)
 
 ---
 
 #### 5. 文化成就 / Cultural Achievements
-Divided into **three sub-sections**, each collapsible:
+Divided into **three sub-sections**, each collapsible (`<details open>`):
 
-- **经济 Economy** — trade routes, currency systems, agricultural innovations, GDP/prosperity indicators
-- **政治 Politics** — governance reforms, institutions created, administrative innovations
+- **经济 Economy** — trade, currency, agriculture, commercial innovation
+- **政治 Politics** — governance reforms, institutions, administrative innovations
 - **文化 Culture** — literature, art, philosophy, religion, science & technology
 
-Each sub-section features **major artifacts / works**:
-- Artifact image (public domain, with attribution)
-- Name in Chinese and English
-- Current museum / collection holding the artifact
-- 1–2 sentence description of its historical significance
+Items with `artifact` field in the content file automatically appear in the **Featured Artifacts gallery** below the three sub-sections:
+- Card with placeholder (artifact name rendered in calligraphic style)
+- Click opens a **lightbox** with artifact name, achievement title, and museum attribution
+- Artifact images not yet sourced — tracked in M5
 
 ---
 
@@ -234,54 +269,58 @@ Each `content/zh/` and `content/en/` Markdown file contains these H2 sections in
 
 ## Milestones
 
-### M1: Website Foundation (Current)
+### M1: Website Foundation ✅
 - [x] Initialize Astro project with Tailwind
 - [x] Basic layout (Header, Footer, Language toggle)
-- [x] Homepage with interactive timeline
+- [x] Homepage with interactive horizontal scroll timeline
 - [x] Dynasty detail page template
 - [x] GitHub Pages deployment pipeline
-- [ ] **Modernize UX** — replace heavy traditional ornamentation with contemporary Chinese aesthetic
-- [ ] Scroll-triggered animations on timeline
-- [ ] Responsive mobile design polish
+- [x] Contemporary Chinese aesthetic UX (inked paper palette, typography-driven)
+- [x] Scroll-triggered reveal animations (Intersection Observer)
+- [x] Responsive mobile design
 
 ### M2: Content Pipeline ✅
 - [x] Set up Astro Content Collections for Markdown (`src/content/config.ts`)
-- [x] Create Markdown frontmatter schema (`dynastySlug`, `lang`, `title`, `englishName`, `period`, `overview`, `color`)
+- [x] Create Markdown frontmatter schema (`dynastySlug`, `lang`, `title`, `englishName`, `period`, `overview`, `color`, `figures`, `events`, `achievements`, `references`)
 - [x] Directory structure: `src/content/dynasty/zh/` and `src/content/dynasty/en/`
 - [x] Markdown rendering inside structured dynasty detail page layout
 - [x] Bilingual route switching (`/zh/dynasty/:slug` ↔ `/en/dynasty/:slug`)
 - [x] Old `/dynasty/:slug` URLs 301-redirect to `/zh/dynasty/:slug`
 - [x] Language toggle in dynasty hero section
-- [x] Initial content: 秦, 唐, 北宋 in both languages with primary source citations
 
-### M3: First Content — Five Dynasties and Ten Kingdoms (五代十国)
-- [ ] Research and write Chinese content based on primary sources
-  - 《旧五代史》《新五代史》《资治通鉴》
-- [ ] Key figures: 朱温, 李存勖, 柴荣, 赵匡胤 (pre-Song), 李煜
-- [ ] Major events: 唐朝灭亡, 后梁建立, 后周改革, 陈桥兵变
-- [ ] Translate to English
-- [ ] Add source citations
+### M3: First Content ✅
+- [x] Qin Dynasty (秦) — zh + en with primary source citations
+- [x] Tang Dynasty (唐) — zh + en with primary source citations
+- [x] Northern Song (北宋) — zh + en with citations, hero artwork (千里江山图)
+- [x] Five Dynasties and Ten Kingdoms (五代十国) — zh + en, key figures (朱温, 李存勖, 柴荣, 李煜, 冯道), events, achievements, citations, hero artwork (韩熙载夜宴图)
 
-### M4: Content Expansion ✅
-- [x] Tang Dynasty (唐) — zh + en with citations
-- [x] Northern Song (北宋) — zh + en with citations
-- [x] Qin Dynasty (秦) — zh + en with citations (ancient era)
+### M4: Rich Detail Pages & Interactivity ✅
+- [x] **重要人物**: figure grid with detail sidebar (desktop, anchored absolute within figures section, Escape to close) and bottom sheet (mobile)
+- [x] **重大事件**: vertical timeline with inline expand (desktop) and bottom sheet (mobile)
+- [x] **文化成就**: three collapsible sub-sections (经济 / 政治 / 文化) with artifact cards
+- [x] Artifact gallery: auto-generated from `achievements.*.artifact` fields
+- [x] Artifact lightbox: click artifact card for full-screen detail view
+- [x] Dynasty hero artwork backgrounds (public domain paintings)
+- [x] Homepage dropdown dynasty navigator
 
-### M5: Rich Detail Pages & Interactivity
-- [ ] **重要人物**: figure grid with right-side expandable panel (slide-in drawer, one open at a time, Escape to close)
-- [ ] **重大事件**: vertical timeline with same expandable panel pattern
-- [ ] **文化成就**: three collapsible sub-sections (经济 / 政治 / 文化), each with artifact cards (image + museum attribution)
-- [ ] Public-domain portrait images for key figures (Wikimedia Commons / National Palace Museum Open Data)
-- [ ] Dynasty territory maps (open-source/public domain SVG)
+### M5: Content Expansion (Next)
+- [ ] Content for remaining 18 dynasties (priority order: 南宋, 明, 清, 汉, 唐五代衔接期)
+- [ ] Portrait images for key figures (Wikimedia Commons / National Palace Museum Open Data, CC0/public domain only)
+- [ ] Dynasty territory maps (open-source SVG)
+
+### M6: Discovery & Scale
 - [ ] Search functionality across dynasty content
-- [ ] Reading progress indicator
-
-### M6: Polish & Scale
-- [ ] All 22 dynasties content complete
 - [ ] SEO optimization (meta tags, structured data, sitemap)
 - [ ] Performance audit (Core Web Vitals)
 - [ ] Accessibility audit (WCAG 2.1 AA)
 - [ ] Social sharing (Open Graph images per dynasty)
+
+### M7: Custom Domain
+- [ ] Register domain (e.g. `chroniclesofchina.com` or `huaxiachunqiu.com`)
+- [ ] Add `prototype-astro/public/CNAME` with domain name
+- [ ] Update `astro.config.mjs`: `site` → custom domain, `base` → `'/'`
+- [ ] Configure DNS: four A records → GitHub Pages IPs + CNAME `www` → `eherozhao.github.io`
+- [ ] In GitHub repo Settings → Pages, verify custom domain and enable HTTPS
 
 ### M7: Custom Domain
 - [ ] Register a domain (e.g. `chroniclesofchina.com` or `huaxiachunqiu.com`) from a registrar (Namecheap, Cloudflare Registrar, etc.)

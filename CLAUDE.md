@@ -54,7 +54,7 @@ There is no test suite currently configured.
 
 ### Deployment
 
-Pushes to `claude/chinese-history-website-dzHsE` trigger the GitHub Actions workflow (`.github/workflows/deploy.yml`), which builds and deploys to GitHub Pages automatically. Do not push directly to `main` without review.
+Pushes to **`main`** trigger the GitHub Actions workflow (`.github/workflows/deploy.yml`), which builds and deploys to GitHub Pages automatically.
 
 ---
 
@@ -110,14 +110,133 @@ interface Dynasty {
 
 Rich content lives in `src/content/dynasty/{lang}/{slug}.md` as Markdown with YAML frontmatter. Schema defined in `src/content/config.ts`:
 
-- `figures[]` — name, englishName, role, years, bio
-- `events[]` — year, name, englishName, description
-- `achievements` — economy[], politics[], culture[] (each with title, description, artifact, museum)
+- `dynastySlug` — must exactly match the `slug` in `dynasties.ts`
+- `lang` — `"zh"` or `"en"`
+- `title` — Chinese name of the dynasty
+- `englishName` — full English name
+- `period` — display string (e.g. `"960–1127"`, use en-dash `–`)
+- `overview` — one-line tagline (≤30 characters for zh, ≤100 for en)
+- `color` — hex accent, should match `dynasties.ts` (optional but recommended)
+- `figures[]` — name, englishName, role, years (string), bio, image (optional path)
+- `events[]` — year (quoted string), name, englishName, description
+- `achievements` — economy[], politics[], culture[] (each: title, description, artifact?, museum?, image?)
 - `references` — primary[], secondary[]
 
-The Markdown body is rendered as the "Overview" prose section. Dynasties without a content file fall back to the `description` from `dynasties.ts`.
+The Markdown body (after the `---` closing delimiter) is rendered as the "Overview" prose section. Dynasties without a content file fall back to the `description` from `dynasties.ts`.
 
 The array in `dynasties.ts` is the single source of truth — all pages are generated from it. When adding or modifying dynasties, update only this file.
+
+---
+
+## Writing Dynasty Content
+
+All content pages follow the pattern established in `beisong` (北宋) and `wudai` (五代十国), which are the reference implementations. Use these as style guides.
+
+### Content quality benchmarks (per file)
+
+| Section | zh target | en target |
+|---------|-----------|-----------|
+| `overview` (tagline) | ≤30 characters | ≤100 characters |
+| `figures` count | 4–6 people | same people, en bios |
+| Figure `bio` | 2–3 sentences, ~60–100 chars | 3–4 sentences, ~60–100 words |
+| `events` count | 5–7 events | same events |
+| Event `description` | 2–3 sentences, ~60–80 chars | 2–3 sentences, ~40–60 words |
+| `achievements` per category | 2–3 items | same items |
+| Achievement `description` | ~70–100 characters | ~40–60 words |
+| `references.primary` | 3–5 sources | 3–5 sources |
+| `references.secondary` | 3–5 monographs | same (en format) |
+| Markdown body | 2–3 paragraphs, ~150–250 chars | 2 paragraphs, ~120–180 words |
+
+### Content file template
+
+Copy this template and fill in for a new dynasty. Create two files: `src/content/dynasty/zh/{slug}.md` and `src/content/dynasty/en/{slug}.md`.
+
+```yaml
+---
+dynastySlug: <slug>           # must match dynasties.ts slug exactly
+lang: zh                      # zh or en
+title: <Chinese name>         # e.g. 北宋
+englishName: <English name>   # e.g. Northern Song
+period: <display period>      # e.g. 960–1127  (use en-dash –, not hyphen -)
+overview: <one-line tagline>  # zh: ≤30 chars; en: ≤100 chars
+color: "<hex>"                # match dynasties.ts color entry
+
+figures:
+  - name: <Chinese name>
+    englishName: <English name and common title>
+    role: <role in zh or en matching the lang>
+    years: <birth–death>      # quoted string, e.g. "927–976"
+    bio: <2–4 sentence biography>
+    # image: images/figures/example.jpg   # optional, omit if unavailable
+
+events:
+  - year: "<year>"            # always quote — may include 约/c. prefix
+    name: <Chinese event name>
+    englishName: <English event name>
+    description: <2–3 sentence narrative of the event and its significance>
+
+achievements:
+  economy:
+    - title: <achievement title>
+      description: <2–3 sentence description>
+      artifact: <artifact name>      # optional — triggers artifact gallery card
+      museum: <Museum Name, City>    # optional — shown in gallery card
+  politics:
+    - title: <achievement title>
+      description: <2–3 sentence description>
+  culture:
+    - title: <achievement title>
+      description: <2–3 sentence description>
+      artifact: <artifact name>      # optional
+      museum: <Museum Name, City>    # optional
+
+references:
+  primary:
+    # zh format:
+    - "作者《书名》，成书年代"
+    # en format:
+    - "Author. *Title* 书名. Compiled <year> CE."
+  secondary:
+    - "Author, First. *Title*. Publisher, Year."
+---
+
+Paragraph 1: Founding context — how the dynasty came to power, who founded it, and what preceded it.
+
+Paragraph 2: Defining character and legacy — what the dynasty is best known for, key achievements, and how it ended.
+```
+
+### Fields that drive UI features
+
+| Field | UI feature activated |
+|-------|---------------------|
+| `figures[].bio` | Shown in figure detail sidebar (desktop) / bottom sheet (mobile) |
+| `events[].description` | Shown in inline expand (desktop) / bottom sheet (mobile) |
+| `achievements.*.artifact` | Generates artifact gallery card in 文化成就 section |
+| `achievements.*.museum` | Shown in artifact card + lightbox |
+| `references.primary` + `references.secondary` | Rendered in 参考资料 section |
+| Markdown body | Rendered as 简介 prose (replaces `dynasties.ts` description) |
+
+### Reference formatting conventions
+
+**zh primary sources:**
+```
+脱脱等《宋史》，元至正三年至五年（1343–1345年）成书
+```
+
+**en primary sources:**
+```
+Toqto'a et al. *Songshi* 宋史 (History of Song). Compiled 1343–1345 CE.
+```
+
+**Secondary (both languages, en format):**
+```
+Twitchett, Denis & Paul Jakov Smith (eds.). *The Cambridge History of China*, Vol. 5, Pt. 1. Cambridge University Press, 2009.
+```
+
+Always include at least one *Cambridge History of China* volume for the relevant period. For Chinese-language secondary sources use the format:
+```
+王仲荦《隋唐五代史》，上海人民出版社，1988年。
+```
 
 ---
 
@@ -245,9 +364,9 @@ Valid slugs: `shanggu`, `xia`, `shang`, `xizhou`, `dongzhou`, `qin`, `xihan`, `d
 2. Choose a unique `slug` in kebab-case
 3. Pick an accent `color` that distinguishes it visually
 4. Optionally add `artwork` and `artworkPosition` for a hero background image (place image in `public/images/`, keep file size under 200KB)
-5. Create content files in `src/content/dynasty/zh/{slug}.md` and `src/content/dynasty/en/{slug}.md` with YAML frontmatter matching the schema in `config.ts`
+5. Create content files in `src/content/dynasty/zh/{slug}.md` and `src/content/dynasty/en/{slug}.md` — use the template in the **Writing Dynasty Content** section above; `beisong.md` and `wudai.md` are the reference implementations
 6. Run `npm run build` to verify `getStaticPaths()` generates the page correctly
-7. No other files need changes — pages and navigation are generated automatically
+7. No other files need changes — pages, navigation, and artifact galleries are generated automatically
 
 ---
 
@@ -255,19 +374,34 @@ Valid slugs: `shanggu`, `xia`, `shang`, `xizhou`, `dongzhou`, `qin`, `xihan`, `d
 
 ### Completed
 - Horizontal-scroll homepage with drag, wheel, touch, and keyboard support
+- Dynasty dropdown navigator on homepage (jump to any dynasty by name)
 - Bilingual routing (`/zh/`, `/en/` prefixes) with language toggle
 - Content Collections (Markdown pipeline for rich per-dynasty content)
 - Dynasty detail pages with prev/next navigation
 - Structured sections: Overview, Key Figures, Key Events, Cultural Achievements, References
-- Hero artwork backgrounds (with compressed images in `public/images/`)
+- Key Figures: figure cards + detail sidebar (desktop, anchored absolute) + bottom sheet (mobile)
+- Key Events: inline expand (desktop) + bottom sheet (mobile)
+- Cultural Achievements: collapsible economy/politics/culture sub-sections
+- Artifact gallery: cards generated from `achievements.*.artifact` fields
+- Artifact lightbox: click any artifact card to view full-screen details
+- Hero artwork backgrounds (`<img>` tag, opacity 0.38, `public/images/`)
 - Scroll-triggered reveal animations (Intersection Observer)
 - Progress bar and active-era indicator on homepage
-- GitHub Pages CI/CD pipeline
+- GitHub Pages CI/CD pipeline (auto-deploys on push to `main`)
 - Custom design system (Tailwind config + global CSS)
 
+### Content files completed
+| Dynasty | zh | en | Artwork |
+|---------|----|----|---------|
+| 秦 (Qin) | ✅ | ✅ | — |
+| 唐 (Tang) | ✅ | ✅ | — |
+| 五代十国 (Five Dynasties) | ✅ | ✅ | ✅ 韩熙载夜宴图 |
+| 北宋 (Northern Song) | ✅ | ✅ | ✅ 千里江山图 |
+
 ### Not Yet Implemented (see SPEC.md)
-- Content for most dynasties (only beisong, tang, qin have content files)
-- Maps and multimedia
+- Content for 18 remaining dynasties
+- Portrait images for key figures (Wikimedia Commons sourcing)
+- Dynasty territory maps
 - Search or filtering
 
 ---
