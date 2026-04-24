@@ -72,7 +72,7 @@ const artifactsJson = JSON.stringify(allArtifacts);
 <Layout title={`${dynasty.name} ${dynasty.englishName} | 华夏春秋`} lang={lang}>
 
   <!-- ── HERO ── -->
-  <section class="bg-night relative overflow-hidden">
+  <section class="bg-night relative overflow-hidden" data-pagefind-ignore>
 
     {/* Artwork: use <img> for reliable rendering */}
     {dynasty.artwork && (
@@ -112,7 +112,9 @@ const artifactsJson = JSON.stringify(allArtifacts);
   </section>
 
   <!-- ── CONTENT — single centred column, sidebar lives outside this flow ── -->
-  <section class="scroll-surface relative">
+  <section class="scroll-surface relative"
+    data-pagefind-body
+    data-pagefind-meta={`dynasty:${dynasty.name}, lang:${lang}, period:${dynasty.period}`}>
     <div class="max-w-2xl mx-auto px-6 py-16 sm:py-20">
 
       <!-- 简介 -->
@@ -364,7 +366,7 @@ const artifactsJson = JSON.stringify(allArtifacts);
       )}
 
       <!-- Prev / Next -->
-      <nav class="flex items-center justify-between pt-10 border-t border-gold/15 mt-10">
+      <nav class="flex items-center justify-between pt-10 border-t border-gold/15 mt-10" data-pagefind-ignore>
         {prev ? (
           <a href={`${import.meta.env.BASE_URL}${lang}/dynasty/${prev.slug}`}
              class="flex items-center gap-3 text-ink-light hover:text-vermillion transition-colors group">

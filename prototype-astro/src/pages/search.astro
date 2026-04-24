@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="搜索 Search | 华夏春秋" lang="zh">
+  <div class="min-h-screen bg-scroll py-16 px-6">
+    <div class="max-w-2xl mx-auto">
+
+      <!-- Header -->
+      <div class="mb-12 text-center">
+        <h1 class="font-heading text-4xl text-ink tracking-wider mb-2">搜索 / Search</h1>
+        <p class="text-ink-faint text-sm tracking-widest">穿越五千年历史 · Explore 5,000 years</p>
+      </div>
+
+      <!-- Pagefind search widget -->
+      <div id="search" class="pagefind-search"></div>
+
+    </div>
+  </div>
+</Layout>
+
+<!-- Load Pagefind UI assets (generated at build time) -->
+<link href={`${import.meta.env.BASE_URL}_pagefind/pagefind-ui.css`} rel="stylesheet" />
+<script is:inline define:vars={{ base: import.meta.env.BASE_URL }}>
+  // Pagefind UI is only available after `npm run build` — not in dev mode.
+  async function initSearch() {
+    const uiScript = document.createElement('script');
+    uiScript.src = base + '_pagefind/pagefind-ui.js';
+    uiScript.onload = () => {
+      new window.PagefindUI({
+        element: '#search',
+        baseUrl: base,
+        showSubResults: true,
+        translations: {
+          placeholder: '搜索朝代、人物、事件… / Search dynasties, figures, events…',
+          zero_results: '未找到结果 · No results for [SEARCH_TERM]',
+        },
+      });
+    };
+    uiScript.onerror = () => {
+      document.getElementById('search').innerHTML =
+        '<p style="color:#888;text-align:center;padding:2rem;font-size:0.875rem">Search index not yet built — run <code>npm run build</code> to generate it.</p>';
+    };
+    document.head.appendChild(uiScript);
+  }
+  initSearch();
+</script>
+
+<style is:global>
+  /* Override Pagefind default styles to match the site design system */
+  :root {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: #C8963C;        /* gold */
+    --pagefind-ui-text: #2C2416;           /* ink */
+    --pagefind-ui-background: #F5ECD7;     /* scroll */
+    --pagefind-ui-border: #C8963C33;       /* gold/20 */
+    --pagefind-ui-tag: #C8963C22;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 2px;
+    --pagefind-ui-image-border-radius: 2px;
+    --pagefind-ui-font: 'Noto Serif SC', Georgia, serif;
+  }
+
+  .pagefind-ui__search-input {
+    background: white !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .pagefind-ui__search-input:focus {
+    outline-color: #C8963C !important;
+    box-shadow: 0 0 0 2px #C8963C33 !important;
+  }
+
+  .pagefind-ui__result {
+    border-bottom: 1px solid #C8963C1A !important;
+    padding-bottom: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .pagefind-ui__result-title {
+    font-family: Georgia, 'Noto Serif SC', serif !important;
+    font-size: 1.05rem !important;
+  }
+
+  .pagefind-ui__result-link {
+    color: #2C2416 !important;
+  }
+
+  .pagefind-ui__result-link:hover {
+    color: #C8963C !important;
+  }
+
+  mark {
+    background: #C8963C33 !important;
+    color: inherit !important;
+    border-radius: 2px !important;
+    padding: 0 2px !important;
+  }
+</style>
